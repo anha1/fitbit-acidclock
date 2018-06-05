@@ -1,0 +1,160 @@
+#root {
+  viewport-fill: black;
+  fill: palegoldenrod;
+}
+
+#background {
+  x: 0;
+  y: 0;
+  width:100%;
+  height:100%;
+  fill:black;
+}
+
+#time {
+  font-size: 50;
+  font-family: Colfax-Medium;
+  text-length: 32;
+  text-anchor: middle;
+  x: 50%;
+  y: 37;
+  fill: white;
+}
+
+#hr {
+  transform: translate(74%,123)
+}
+
+#bat {
+  transform: translate(74%,203)
+}
+
+#steps {
+  transform: translate(5,83);  
+}
+
+#distance {
+  transform: translate(5,123)
+}
+#elevationGain  {
+  transform: translate(5,163)
+}
+#calories  {
+  transform: translate(5,203)
+}
+
+
+#date {
+  x: 50%;
+  y: 67;
+  font-size: 31;
+  text-anchor: middle;
+  font-family: Colfax-Medium;
+  text-length: 120;
+  fill: palegoldenrod;
+}
+
+
+#bat-body{
+  y:4;
+  x:2;
+  height: 16;
+  width: 22
+}
+#bat-head{
+  y:8;
+  height: 8;
+  width: 2;
+}
+
+#bat-fill{
+  y: 6;
+  height: 12;
+  x:4;
+  width: 19;
+  fill:black;
+}
+
+.progress {
+  x:26;
+  y:29;
+  height: 5;
+  width: 163;
+}
+
+.bg {
+  x:26;
+  y:31;
+  height: 1;
+  width: 163;
+}
+
+.tgt-no {
+  cx: 192;
+  cy: 31;
+  r:4;
+}
+
+.tgt-yes {
+  cx: 192;
+  cy: 31;
+  r:8;
+ 
+  display: none;
+}
+
+.icon {
+  width: 24;
+  height: 24;
+  x:0;
+  y:0;
+}
+
+.count {
+  font-size: 32;
+  x: 26;
+  y: 25;
+  font-family: Fabrikat-Bold;
+  text-length: 10; 
+}
+
+#steps {  
+  fill: gold;
+}
+
+#distance {
+  fill: yellowgreen;
+}
+
+#elevationGain {
+  fill: skyblue;
+}
+
+#calories {
+  fill: violet;
+}
+
+
+#hr-icon-systole {
+  fill: crimson;
+  width: 20;
+  height: 20;
+  x:2;
+  y:2;
+}
+
+#hr-icon-diastole {
+  fill: crimson;
+  width: 24;
+  height: 24;
+}
+
+
+#hr-count {
+  text-anchor: start ;
+}
+
+
+#bat-count {
+  text-anchor: start ;
+}

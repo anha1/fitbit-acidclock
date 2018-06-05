@@ -1,0 +1,22 @@
+{
+  "fitbit": {
+    "appUUID": "7a16871b-5016-4adb-9f33-bfd793e50d4c",
+    "appType": "clockface",
+    "appDisplayName": "AcidClock",
+    "iconFile": "resources/icon.png",
+    "wipeColor": "",
+    "requestedPermissions": [
+      "access_activity",
+      "access_heart_rate"
+    ],
+    "buildTargets": [
+      "higgs",
+      "meson"
+    ],
+    "i18n": {
+      "en": {
+        "name": "AcidClock"
+      }
+    }
+  }
+}
