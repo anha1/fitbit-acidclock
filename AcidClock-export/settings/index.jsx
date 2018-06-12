@@ -41,9 +41,7 @@ function mySettings(props) {
   {color: '#969696'}, 
   {color: '#494949'}, 
   {color: '#2d2d2d'}
-    
-    
- 
+
 ];
   return (
     <Page>
@@ -71,6 +69,12 @@ function mySettings(props) {
          settingsKey="isHeartbeatAnimation"
          label="Heartbeat animation"
       />
+      
+      <Toggle
+         settingsKey="isAmPm"
+         label="AM/PM indication on 12-hour clock"
+      />
+      
       <Section
         title="Time color">
         <ColorSelect

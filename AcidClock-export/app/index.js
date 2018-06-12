@@ -118,7 +118,7 @@ let drawProgress = function(progressEl) {
   var displayValue = actual;
   if (prefix === "distance" && actual) {
     
-    if(screenshotMode) {
+    if (screenshotMode) {
       displayValue = "6.51";
     } else if (distanceUnit === "km") {
       displayValue = (actual / 1000.).toPrecision(3);
@@ -134,17 +134,27 @@ let drawProgress = function(progressEl) {
 let drawTime = function(now) {
 
   var hours = now.getHours();
-  if (preferences.clockDisplay === "12h") {
-    // 12h format
-    hours = hours % 12 || 12;
+  var amPm = "";
+  if (preferences.clockDisplay === "12h" || isAmPm || screenshotMode) {
+    // 12h format    
+    if (isAmPm) {
+      if (hours < 12) {
+        amPm = " AM";
+      } else {
+        amPm = " PM";
+      }
+    }
+    
+    hours = hours % 12 || 12;    
   } else {
     // 24h format
     hours = util.zeroPad(hours);
   }
   let mins = util.zeroPad(now.getMinutes());
-  timeEl.text = `${hours}:${mins}`;
   
-  if(screenshotMode) {
+  timeEl.text = `${hours}:${mins}${amPm}`;
+  
+  if (screenshotMode) {
      timeEl.text = "08:17"
   }
   
@@ -172,10 +182,18 @@ var drawAllProgress = function() {
   }
 }
 
+var resetProgressPrevState = function() {
+  for(var i=0; i < goalTypes.length; i++) {  
+    progressEls[i].prevProgressVal = null;
+  }
+}
+
 let hrm = new HeartRateSensor();
 
 var isHeartbeatAnimation=true;
-var hrmAnimationCounter = 0;
+var isAmPm = false;
+
+var hrmAnimationPhase = false;
 
 var prevHrmRate = null;
 
@@ -209,11 +227,14 @@ let hideHr = function() {
 }
 
 let animateHr = function() {   
-    if (hrmAnimationCounter++ % 2 ==0) {
+    if (hrmAnimationPhase) {
       hrIconDiastoleEl.style.display = "none";
     } else {
       hrIconDiastoleEl.style.display = "inline";  
     }
+  
+    hrmAnimationPhase =!hrmAnimationPhase;
+  
     if (prevHrmRate != hrmRate) {
       clearInterval(hrAnimatedInterval);
       if (isHeartbeatAnimation) {
@@ -231,7 +252,7 @@ let drawHrm = function() {
     if (!prevHrmRate) {
       hrEl.style.display = "inline";    
     }
-    if(!hrAnimated && isHeartbeatAnimation) {
+    if (!hrAnimated && isHeartbeatAnimation) {
       clearInterval(hrAnimatedInterval);   
       prevHrmRate = hrmRate;
       initHrInterval();
@@ -285,7 +306,7 @@ clock.ontick = (evt) => {
 
 // SETTINGS
 const SETTINGS_TYPE = "cbor";
-const SETTINGS_FILE = "settingsV1.cbor";
+const SETTINGS_FILE = screenshotMode ? "settingsVS.cbor":"settingsV1.cbor";
 
 let settings = loadSettings();
 
@@ -313,30 +334,36 @@ let applySettings = function() {
     if (settings.hasOwnProperty("isHeartbeatAnimation")) {
       isHeartbeatAnimation = !!settings.isHeartbeatAnimation; 
     }       
+    
+    if (settings.hasOwnProperty("isAmPm")) {
+      isAmPm = !!settings.isAmPm; 
+    }       
 
-    if(settings.hasOwnProperty("otherLabelsColor") && settings["otherLabelsColor"]) {
+
+    if (settings.hasOwnProperty("otherLabelsColor") && settings["otherLabelsColor"]) {
        var otherLabelsColor = settings["otherLabelsColor"];
        root.style.fill = otherLabelsColor;      
     }
 
-    if(settings.hasOwnProperty("backgroundColor") && settings["backgroundColor"]) {
+    if (settings.hasOwnProperty("backgroundColor") && settings["backgroundColor"]) {
        var backgroundColor = settings["backgroundColor"];
        backgroundEl.style.fill = backgroundColor;     
        batFillEl.style.fill = backgroundColor;
     }
 
-    if(settings.hasOwnProperty("heartColor") && settings["heartColor"]) {
+    if (settings.hasOwnProperty("heartColor") && settings["heartColor"]) {
        var heartColor = settings["heartColor"];
        hrIconDiastoleEl.style.fill = heartColor;
        hrIconSystoleEl.style.fill = heartColor;         
     }
 
-    for(var i=0; i < goalTypes.length; i++) {
+    for (var i=0; i < goalTypes.length; i++) {
       var goalTypeProp = goalTypes[i] + "Color";
-      if(settings.hasOwnProperty(goalTypeProp) && settings[goalTypeProp]) {
+      if (settings.hasOwnProperty(goalTypeProp) && settings[goalTypeProp]) {
         progressEls[i].container.style.fill = settings[goalTypeProp];
       }
     }
+    resetProgressPrevState();
     applyState();
   } catch (ex) {
     console.log(ex);
