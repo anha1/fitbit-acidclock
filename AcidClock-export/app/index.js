@@ -48,15 +48,27 @@ let goalTypes = [
   "steps",
   "distance",
   "elevationGain",
-  "calories"
+  "calories",
+  "activeMinutes"
 ];
 
 let progressEls = [];
 
-for(var i=0; i < goalTypes.length; i++) {
+for (var i=0; i < goalTypes.length; i++) {
   var goalType = goalTypes[i];
   progressEls.push(getProgressEl(goalType)); 
 }  
+
+let root = document.getElementById('root')
+const screenHeight = root.height //250 - Ionic, 300 - Versa
+const screenWidth = root.width
+
+let isLongScreen = screenHeight >= 300;
+
+if (!isLongScreen) {
+  progressEls[4].container.style.display = "none";
+}
+
 
 let timeEl = document.getElementById("time");
 let dateEl = document.getElementById("date"); 
@@ -177,13 +189,13 @@ let drawTime = function(now) {
 }
 
 var drawAllProgress = function() {
-  for(var i=0; i < goalTypes.length; i++) {  
+  for (var i=0; i < goalTypes.length; i++) {  
     drawProgress(progressEls[i]);
   }
 }
 
 var resetProgressPrevState = function() {
-  for(var i=0; i < goalTypes.length; i++) {  
+  for (var i=0; i < goalTypes.length; i++) {  
     progressEls[i].prevProgressVal = null;
   }
 }

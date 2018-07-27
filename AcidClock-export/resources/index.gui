@@ -49,5 +49,14 @@
     <rect class="progress"/>    
     <text class="count">777</text>
     <image id="calories-icon" class="icon" href="stat_cals_solid_24px.png" />
+  </g> 
+  <g id="activeMinutes">
+    <rect class="bg"/>  
+    <circle class="tgt-no"/>  
+    <circle class="tgt-yes"/>  
+    <rect class="progress"/>    
+    <text class="count">777</text>
+    <image id="activeMinutes-icon" class="icon" href="stat_am_solid_24px.png" />
   </g>
+
 </svg>

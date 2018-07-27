@@ -35,6 +35,13 @@ function mySettings(props) {
   {color: 'palegoldenrod'},  
   {color: 'navy'},
     
+  {color: 'deeppink'},
+  {color: 'royalblue'},
+  {color: 'orangered'},
+  {color: 'greenyellow'}, 
+  {color: 'tomato'},  
+  {color: 'forestgreen'},
+    
   {color: '#00163a'},
   {color: '#21003a'},
   {color: '#3a1d00'},
@@ -114,6 +121,13 @@ function mySettings(props) {
         title="Calories color">
         <ColorSelect
           settingsKey="caloriesColor"
+          colors={colorSet} />
+      </Section>
+      
+      <Section
+        title="Active Minutes color">
+        <ColorSelect
+          settingsKey="activeMinutesColor"
           colors={colorSet} />
       </Section>
       
