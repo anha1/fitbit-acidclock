@@ -12,23 +12,16 @@ import * as fs from "fs";
 import * as messaging from "messaging";
 import { me as appbit } from "appbit";
 import { me as device } from "device";
+import * as weekday from "../common/weekday"
+import { locale } from "user-settings";
 
 clock.granularity = "minutes";
-
-let weekday = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday"
-]
 
 let screenshotMode = false;
 
 var dateFormat = "DD.MM";
 var distanceUnit = "m";
+var language = "en"
 
 let getProgressEl = function(prefix) {  
   let containerEl = document.getElementById(prefix);
@@ -73,6 +66,8 @@ if (!isLongScreen) {
 let timeEl = document.getElementById("time");
 let dateEl = document.getElementById("date"); 
 
+//timeEl.style.textAnchor = "left";
+
 let hrEl = document.getElementById("hr");
 let hrIconSystoleEl = document.getElementById("hr-icon-systole");
 let hrIconDiastoleEl = document.getElementById("hr-icon-diastole");
@@ -90,9 +85,9 @@ let backgroundEl = document.getElementById('background')
 let screenHeight = root.height
 let screenWidth = root.width
 
-let progressWidth = progressEls[0].container.getElementsByClassName("bg")[0].width;
+let progressWidth = progressEls[0].container.getElementsByClassName("bg")[0].getBBox().width;
 let hrIconX = hrIconEl.x;
-let batFillWidth = batBody.width - 4; 
+let batFillWidth = batBody.width - 4;
 
 let drawProgress = function(progressEl) {
   let prefix = progressEl.prefix;
@@ -111,10 +106,11 @@ let drawProgress = function(progressEl) {
   }
   
   if (screenshotMode) { 
-    progress = 66 + 100*Math.random();
+    progress = 66 + 100 * Math.random();
   }
-  
+    
   var isGoalReached = false;
+  
   if (progress >= 100) {
     progress = 100;
     isGoalReached = true;
@@ -173,14 +169,14 @@ let drawTime = function(now) {
   let day = now.getDate();
   let monthIndex = now.getMonth() + 1;
   
-  let dayName = weekday[now.getDay()];
+  let dayName = weekday.getWeekdayName(language, now.getDay());
 
   var dateText;  
 
   if (dateFormat == "DD.MM") {
-    dateText= ", " +util.zeroPad(day) + "." + util.zeroPad(monthIndex);    
+    dateText= ", " + util.zeroPad(day) + "." + util.zeroPad(monthIndex);    
   } else {
-    dateText= ", " +util.zeroPad(monthIndex) + "." + util.zeroPad(day);
+    dateText= ", " + util.zeroPad(monthIndex) + "." + util.zeroPad(day);
   }
   if (screenshotMode) {
     dateText = ", 03.05"
@@ -331,6 +327,8 @@ let applySettings = function() {
     dateFormat = (settings.hasOwnProperty("dateFormat") && settings.dateFormat.values) ? settings.dateFormat.values[0].value : "DD.MM";
     distanceUnit = (settings.hasOwnProperty("distanceUnit") && settings.distanceUnit.values) ? settings.distanceUnit.values[0].value : "m";
 
+    language = (settings.hasOwnProperty("language") && settings.language.values) ? settings.language.values[0].value : "en";
+    
     if (settings.hasOwnProperty("timeColor") && settings.timeColor) {
       timeEl.style.fill = settings.timeColor;
     }
@@ -350,7 +348,6 @@ let applySettings = function() {
     if (settings.hasOwnProperty("isAmPm")) {
       isAmPm = !!settings.isAmPm; 
     }       
-
 
     if (settings.hasOwnProperty("otherLabelsColor") && settings["otherLabelsColor"]) {
        var otherLabelsColor = settings["otherLabelsColor"];
@@ -411,6 +408,7 @@ function loadSettings() {
     var defaults = {
       isHeartbeatAnimation: true,
       isFastProgress: false,
+      language: 'en'
     };    
     
     if (units.distance === "us") {

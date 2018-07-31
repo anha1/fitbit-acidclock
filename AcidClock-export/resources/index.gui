@@ -1,12 +1,13 @@
 <svg id="root">
   
-  <rect id="background"/> 
-  
+ 
+  <rect id="background" /> 
+
   <text id="time"/>
   <text id="date"/>
      
   <g id="hr"> 
-    <text id="hr-count" class="count">56</text>    
+    <text id="hr-count" class="count sideCount">56</text>    
     <image id="hr-icon-systole" class="icon" href="stat_hr_solid_24px.png" />
     <image id="hr-icon-diastole" class="icon" href="stat_hr_solid_24px.png" />
   </g>  
@@ -16,13 +17,13 @@
       <rect id="bat-head"/>
     </g>
     <rect id="bat-fill"/>
-    <text id="bat-count" class="count">87</text>   
+    <text id="bat-count" class="count sideCount">87</text>   
   </g> 
   <g id="steps">
     <rect class="bg"/>  
     <circle class="tgt-no"/>  
     <circle class="tgt-yes"/>  
-    <rect class="progress"/>    
+    <rect class="progress"/>  
     <text class="count">777</text>
     <image  class="icon" href="stat_steps_solid_24px.png" />
   </g>

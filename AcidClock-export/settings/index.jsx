@@ -52,6 +52,31 @@ function mySettings(props) {
 ];
   return (
     <Page>
+ 
+      
+      <Select
+      label="Language"
+      settingsKey="language"
+      options={[
+        {value:"en", name:"English"},
+        {value:"de", name:"German"},
+        {value:"nl", name:"Dutch"},
+        {value:"it", name:"Italian"},
+        {value:"fr", name:"French"},
+        {value:"es", name:"Spanish"},
+        {value:"nb", name:"Norwegian"},
+        {value:"sv", name:"Swedish"},        
+        {value:"hu", name:"Hungarian"},
+        {value:"pl", name:"Polish"},
+        {value:"uk", name:"Ukrainian"},
+        {value:"ru", name:"Russian"},      
+        {value:"zh", name:"Chinese"},
+        {value:"ja", name:"Japanese"},          
+        {value:"ko", name:"Korean"},   
+        {value:"sw", name:"Swahili"}
+      ]}
+      />
+      
       <Select
       label="Date Format"
       settingsKey="dateFormat"

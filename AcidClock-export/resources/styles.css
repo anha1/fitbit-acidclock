@@ -12,21 +12,21 @@
 }
 
 #time {
-  font-size: 50;
+  font-size: 48;
   font-family: Colfax-Medium;
   text-length: 32;
   text-anchor: middle;
   x: 50%;
-  y: 37;
+  y: 40;
   fill: white;
 }
 
 #hr {
-  transform: translate(74%,123)
+  transform: translate(100%-78,123)
 }
 
 #bat {
-  transform: translate(74%,203)
+  transform: translate(100%-78,203)
 }
 
 #steps {
@@ -46,15 +46,12 @@
   transform: translate(5,243)
 }
 
-
-
-
 #date {
   x: 50%;
-  y: 67;
+  y: 69;
   font-size: 31;
   text-anchor: middle;
-  font-family: Colfax-Medium;
+  font-family: Seville-Regular;
   text-length: 120;
   fill: palegoldenrod;
 }
@@ -66,6 +63,7 @@
   height: 16;
   width: 22
 }
+
 #bat-head{
   y:8;
   height: 8;
@@ -77,34 +75,33 @@
   height: 12;
   x:4;
   width: 19;
-  fill:black;
+  fill: black;
 }
 
 .progress {
   x:26;
   y:29;
   height: 5;
-  width: 163;
+  width: 10;
 }
 
 .bg {
   x:26;
   y:31;
   height: 1;
-  width: 163;
+  width: 62%-24;
 }
 
 .tgt-no {
-  cx: 192;
+  cx: 62%+5;
   cy: 31;
-  r:4;
+  r: 4;
 }
 
 .tgt-yes {
-  cx: 192;
+  cx: 62%+5;
   cy: 31;
-  r:8;
- 
+  r: 8; 
   display: none;
 }
 
@@ -119,8 +116,8 @@
   font-size: 32;
   x: 26;
   y: 25;
-  font-family: Fabrikat-Bold;
   text-length: 10; 
+  font-family: Fabrikat-Bold;
 }
 
 #steps {  

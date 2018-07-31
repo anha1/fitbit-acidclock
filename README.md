@@ -1,5 +1,5 @@
 # fitbit-acidclock
-AcidClock Clock Face for Fitbit Versa/Ionic.
+[AcidClock](https://gam.fitbit.com/gallery/clock/7a16871b-5016-4adb-9f33-bfd793e50d4c) Clock Face for Fitbit Versa/Ionic.
 
 ##### Fitbit Versa
 ![Versa](https://raw.githubusercontent.com/anha1/fitbit-acidclock/master/screenshots/versa.png)  
