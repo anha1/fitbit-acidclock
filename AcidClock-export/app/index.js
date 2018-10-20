@@ -66,8 +66,6 @@ if (!isLongScreen) {
 let timeEl = document.getElementById("time");
 let dateEl = document.getElementById("date"); 
 
-//timeEl.style.textAnchor = "left";
-
 let hrEl = document.getElementById("hr");
 let hrIconSystoleEl = document.getElementById("hr-icon-systole");
 let hrIconDiastoleEl = document.getElementById("hr-icon-diastole");
@@ -86,7 +84,6 @@ let screenHeight = root.height
 let screenWidth = root.width
 
 let progressWidth = progressEls[0].container.getElementsByClassName("bg")[0].getBBox().width;
-let hrIconX = hrIconEl.x;
 let batFillWidth = batBody.width - 4;
 
 let drawProgress = function(progressEl) {
