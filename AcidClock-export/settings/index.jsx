@@ -94,12 +94,18 @@ function mySettings(props) {
         {name:"kilometers", value:"km"},
         {name:"feet", value:"ft"},
         {name:"miles", value:"mi"},
+        {name:"yards", value:"yd"}          
       ]}
       />
       
       <Toggle
-         settingsKey="isHeartbeatAnimation"
-         label="Heartbeat animation"
+         settingsKey="isShowDistanceUnit"
+         label="Show Distance Unit label"
+      />
+            
+      <Toggle
+         settingsKey="isShowStepsProgress"
+         label="Show steps per current hour"
       />
       
       <Toggle

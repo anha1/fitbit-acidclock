@@ -1,6 +1,4 @@
 <svg id="root">
-  
- 
   <rect id="background" /> 
 
   <text id="time"/>

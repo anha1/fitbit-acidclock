@@ -22,6 +22,8 @@ let screenshotMode = false;
 var dateFormat = "DD.MM";
 var distanceUnit = "m";
 var language = "en"
+var isShowStepsProgress = true;
+var isShowDistanceUnit = false;
 
 let getProgressEl = function(prefix) {  
   let containerEl = document.getElementById(prefix);
@@ -45,7 +47,45 @@ let goalTypes = [
   "activeMinutes"
 ];
 
+let getCurrentStepsOnHourStart = function() {
+  let now = new Date();
+  if (now.getHours() === 0 && now.getMinutes() === 0) {
+    // workaround for a hypothetically possible race condition at 00:00
+    return 0;
+  }
+  return today.local["steps"] || 0;
+}
+
 let progressEls = [];
+
+let stepsByMinute = [];
+var stepsOnHourStart = getCurrentStepsOnHourStart();
+
+var getNextHourStartsInMs = function() {
+  let now = new Date();
+  return 3600001 - now.getMinutes() * 60000 - now.getSeconds() * 1000 - now.getMilliseconds();
+}
+
+var stepsProgressTimeout = null;
+
+var updateStepsOnHourStartAndScheduleNextUpdate = function() {
+  clearTimeout(stepsProgressTimeout); 
+  stepsOnHourStart = getCurrentStepsOnHourStart();
+  resetProgressPrevState();
+  drawAllProgress();
+  stepsProgressTimeout = setTimeout(updateStepsOnHourStartAndScheduleNextUpdate, getNextHourStartsInMs()); 
+}
+
+let initStepsProgressUpdates = function() { 
+  if (!stepsProgressTimeout) {
+    updateStepsOnHourStartAndScheduleNextUpdate();
+  }
+}
+
+let clearStepsProgressUpdates = function() {
+  clearTimeout(stepsProgressTimeout);  
+  stepsProgressTimeout = null;
+}
 
 for (var i=0; i < goalTypes.length; i++) {
   var goalType = goalTypes[i];
@@ -61,7 +101,6 @@ let isLongScreen = screenHeight >= 300;
 if (!isLongScreen) {
   progressEls[4].container.style.display = "none";
 }
-
 
 let timeEl = document.getElementById("time");
 let dateEl = document.getElementById("date"); 
@@ -86,6 +125,42 @@ let screenWidth = root.width
 let progressWidth = progressEls[0].container.getElementsByClassName("bg")[0].getBBox().width;
 let batFillWidth = batBody.width - 4;
 
+let getStepsProgress = function(stepsCurrent) {
+  if (screenshotMode) {
+    return 312;
+  }
+  return Math.max(0, stepsCurrent - stepsOnHourStart);
+}
+
+let getDistanceDisplayValue = function(actual) {
+  var displayValue = actual;
+    if (screenshotMode) {
+      displayValue = "6.51";
+    } else if (distanceUnit === "km") {
+      displayValue = (actual / 1000.).toPrecision(3);
+    } else if (distanceUnit === "ft") {
+      displayValue = Math.round(actual * 3.2808);      
+    } else if (distanceUnit === "mi") {
+      displayValue = (actual / 1609.344).toPrecision(3);      
+    } else if (distanceUnit === "yd") {
+      displayValue = Math.round(actual * 1.0936);      
+    }   
+  
+    if (isShowDistanceUnit) {
+      displayValue = displayValue + " " + distanceUnit;
+    }
+    return displayValue;
+}
+
+let getStepsDisplayValue = function(actual) { 
+  if (isShowStepsProgress) {   
+    let stepsProgress = getStepsProgress(actual);    
+    return actual + " +" + stepsProgress;    
+  } else {
+    return actual;
+  }
+}
+
 let drawProgress = function(progressEl) {
   let prefix = progressEl.prefix;
   
@@ -103,9 +178,9 @@ let drawProgress = function(progressEl) {
   }
   
   if (screenshotMode) { 
-    progress = 66 + 100 * Math.random();
+    progress = 55 + 66 * Math.random();
   }
-    
+     
   var isGoalReached = false;
   
   if (progress >= 100) {
@@ -121,18 +196,11 @@ let drawProgress = function(progressEl) {
   progressEl.progress.width =  Math.floor(progressWidth * progress / 100);  
   
   var displayValue = actual;
-  if (prefix === "distance" && actual) {
-    
-    if (screenshotMode) {
-      displayValue = "6.51";
-    } else if (distanceUnit === "km") {
-      displayValue = (actual / 1000.).toPrecision(3);
-    } else if (distanceUnit === "ft") {
-      displayValue = Math.round(actual * 3.2808);      
-    } else if (distanceUnit === "mi") {
-      displayValue = (actual / 1609.344).toPrecision(3);      
-    }
-  }  
+  if (prefix === "distance" && actual) {    
+    displayValue = getDistanceDisplayValue(actual);
+  } else if (prefix === "steps" && actual) {    
+    displayValue = getStepsDisplayValue(actual);
+  }
   progressEl.count.text = displayValue;
 }
 
@@ -195,7 +263,6 @@ var resetProgressPrevState = function() {
 
 let hrm = new HeartRateSensor();
 
-var isHeartbeatAnimation=true;
 var isAmPm = false;
 
 var hrmAnimationPhase = false;
@@ -204,24 +271,13 @@ var prevHrmRate = null;
 
 var hrmRate = null;
 
-var hrAnimated = false;
 var hrAnimatedInterval = null;
-let initHrInterval = function() {
-  clearInterval(hrAnimatedInterval);
-  hrAnimatedInterval = setInterval(animateHr, 30000/hrmRate);
-}
 
 var isFastProgress = false;
 var fastProgressInterval = null;
 let initFastProgressInterval = function() {
   clearInterval(fastProgressInterval);
   fastProgressInterval = setInterval(drawAllProgress, 5000);
-}
-
-let stopHrAnimation = function() {
-  hrAnimated = false;
-  clearInterval(hrAnimatedInterval);
-  hrIconDiastoleEl.style.display = "inline";
 }
 
 let hideHr = function() {
@@ -231,47 +287,52 @@ let hideHr = function() {
    hrEl.style.display = "none";
 }
 
-let animateHr = function() {   
-    if (hrmAnimationPhase) {
-      hrIconDiastoleEl.style.display = "none";
-    } else {
-      hrIconDiastoleEl.style.display = "inline";  
-    }
-  
-    hrmAnimationPhase =!hrmAnimationPhase;
-  
-    if (prevHrmRate != hrmRate) {
-      clearInterval(hrAnimatedInterval);
-      if (isHeartbeatAnimation) {
-        prevHrmRate = hrmRate;
-        initHrInterval();
-      }
-    }     
-    prevHrmRate = hrmRate;
-}
-
-let drawHrm = function() {  
+let showHr = function() {  
+  // updating HRM readings
   hrmRate = hrm.heartRate;
   if (hrmRate && display.on) {
+    // displaying HRM readings
     hrCountEl.text = hrmRate;  
     if (!prevHrmRate) {
+      //this is the first showHr() call after hideHr() - showing the element and starting the animation
       hrEl.style.display = "inline";    
-    }
-    if (!hrAnimated && isHeartbeatAnimation) {
-      clearInterval(hrAnimatedInterval);   
-      prevHrmRate = hrmRate;
-      initHrInterval();
-      hrAnimated = true;      
+      animateHr();
     }
   } else {
     hideHr();
   }
 }
 
-drawHrm();
-hrm.onreading = drawHrm;
-hrm.start();
+let initHrInterval = function() {
+  clearInterval(hrAnimatedInterval);
+  hrAnimatedInterval = setInterval(animateHr, 30000/hrmRate);
+}
 
+let stopHrAnimation = function() {
+  clearInterval(hrAnimatedInterval);
+  hrIconDiastoleEl.style.display = "inline";
+}
+
+let animateHr = function() {   
+    //animating a single systole or diastole depending on the animation phase
+    if (hrmAnimationPhase) {
+      hrIconDiastoleEl.style.display = "none";
+    } else {
+      hrIconDiastoleEl.style.display = "inline";  
+    }  
+    hrmAnimationPhase =!hrmAnimationPhase;
+  
+    if (prevHrmRate != hrmRate) {
+      //HRM readings have been changed: need to ajust and restart animation interval
+      clearInterval(hrAnimatedInterval);      
+      prevHrmRate = hrmRate;
+      initHrInterval();      
+    }     
+    prevHrmRate = hrmRate;
+}
+
+hrm.onreading = showHr;
+hrm.start();
 
 let drawBat = function() {
   let level = battery.chargeLevel;
@@ -287,11 +348,8 @@ let applyState = function() {
     } else {
       clearInterval(fastProgressInterval);
     }
-
     if (!hrmRate) {
       hideHr()    
-    } else if(!isHeartbeatAnimation) {
-      stopHrAnimation();
     }
     drawAllProgress();
   } else {
@@ -304,9 +362,10 @@ let applyState = function() {
 display.onchange = applyState;
 
 clock.ontick = (evt) => {  
-  drawTime(evt.date); 
+  let now = evt.date;
+  drawTime(now); 
   drawAllProgress();
-  drawBat();  
+  drawBat();
 }
 
 // SETTINGS
@@ -321,10 +380,10 @@ let applySettings = function() {
   }
   
   try {
-    dateFormat = (settings.hasOwnProperty("dateFormat") && settings.dateFormat.values) ? settings.dateFormat.values[0].value : "DD.MM";
-    distanceUnit = (settings.hasOwnProperty("distanceUnit") && settings.distanceUnit.values) ? settings.distanceUnit.values[0].value : "m";
+      dateFormat = (settings.hasOwnProperty("dateFormat") && settings.dateFormat.values) ? settings.dateFormat.values[0].value : "DD.MM";
+      distanceUnit = (settings.hasOwnProperty("distanceUnit") && settings.distanceUnit.values) ? settings.distanceUnit.values[0].value : "m";
 
-    language = (settings.hasOwnProperty("language") && settings.language.values) ? settings.language.values[0].value : "en";
+      language = (settings.hasOwnProperty("language") && settings.language.values) ? settings.language.values[0].value : "en";
     
     if (settings.hasOwnProperty("timeColor") && settings.timeColor) {
       timeEl.style.fill = settings.timeColor;
@@ -336,11 +395,21 @@ let applySettings = function() {
 
     if (settings.hasOwnProperty("isFastProgress")) {
       isFastProgress = !!settings.isFastProgress;    
+    }    
+    
+    if (settings.hasOwnProperty("isShowStepsProgress")) {
+      isShowStepsProgress = !!settings.isShowStepsProgress;
+    } 
+    
+    if (isShowStepsProgress) {
+      initStepsProgressUpdates();
+    } else {
+      clearStepsProgressUpdates();
     }
-
-    if (settings.hasOwnProperty("isHeartbeatAnimation")) {
-      isHeartbeatAnimation = !!settings.isHeartbeatAnimation; 
-    }       
+     
+    if (settings.hasOwnProperty("isShowDistanceUnit")) {
+      isShowDistanceUnit = !!settings.isShowDistanceUnit; 
+    }   
     
     if (settings.hasOwnProperty("isAmPm")) {
       isAmPm = !!settings.isAmPm; 
@@ -403,7 +472,7 @@ function loadSettings() {
   } catch (ex) {
     console.log(ex);
     var defaults = {
-      isHeartbeatAnimation: true,
+      isShowStepsProgress: true,
       isFastProgress: false,
       language: 'en'
     };    

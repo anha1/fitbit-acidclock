@@ -8,7 +8,7 @@
   y: 0;
   width:100%;
   height:100%;
-  fill:black;
+  fill: black;
 }
 
 #time {
@@ -89,17 +89,17 @@
   x:26;
   y:31;
   height: 1;
-  width: 62%-24;
+  width: 65%-24;
 }
 
 .tgt-no {
-  cx: 62%+5;
+  cx: 65%+5;
   cy: 31;
   r: 4;
 }
 
 .tgt-yes {
-  cx: 62%+5;
+  cx: 65%+5;
   cy: 31;
   r: 8; 
   display: none;
@@ -116,7 +116,7 @@
   font-size: 32;
   x: 26;
   y: 25;
-  text-length: 10; 
+  text-length: 15; 
   font-family: Fabrikat-Bold;
 }
 
