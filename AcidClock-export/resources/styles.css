@@ -26,7 +26,7 @@
 }
 
 #bat {
-  transform: translate(100%-78,203)
+  transform: translate(100%-78,163);
 }
 
 #steps {
@@ -46,6 +46,22 @@
   transform: translate(5,243)
 }
 
+#crypto-left {
+  transform: translate(5,100%-44)
+}
+
+#crypto-right {
+  transform: translate(50%,100%-44)
+}
+
+#crypto-container {
+  display: none;
+}
+
+#crypto-container .icon {
+  fill: white;
+}
+
 #date {
   x: 50%;
   y: 69;
@@ -57,20 +73,20 @@
 }
 
 
-#bat-body{
+#bat-body {
   y:4;
   x:2;
   height: 16;
   width: 22
 }
 
-#bat-head{
+#bat-head {
   y:8;
   height: 8;
   width: 2;
 }
 
-#bat-fill{
+#bat-fill {
   y: 6;
   height: 12;
   x:4;

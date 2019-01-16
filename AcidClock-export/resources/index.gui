@@ -57,5 +57,15 @@
     <text class="count">777</text>
     <image id="activeMinutes-icon" class="icon" href="stat_am_solid_24px.png" />
   </g>
-
+  
+  <rect id="crypto-container"> 
+    <g id="crypto-left">      
+      <text class="count" id="crypto-left-er">?</text>
+      <image class="icon" id="crypto-left-logo" href="crypto/btc.png" />
+    </g> 
+    <g id="crypto-right">      
+      <text class="count" id="crypto-right-er">?</text>
+      <image class="icon" id="crypto-right-logo" href="crypto/eth.png" />
+    </g> 
+  </rect>
 </svg>
