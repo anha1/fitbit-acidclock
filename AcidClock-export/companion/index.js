@@ -3,13 +3,37 @@ import { settingsStorage } from "settings";
 import { CryptoCompanion } from "./crypto.js"
 import { me } from "companion"
 import { logInfo, logError } from "../common/log";
+import { device } from "peer";
+import { settingsStorage } from "settings";
+import { outbox } from "file-transfer";
+import { Image } from "image";
 
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 
 let cryptoCompanion = new CryptoCompanion();
 
+settingsStorage.setItem("screenWidth", device.screen.width);
+settingsStorage.setItem("screenHeight", device.screen.height);
+
+var compressAndTransferImage = function(settingsValue) {
+  const imageData = JSON.parse(settingsValue);
+  Image.from(imageData.imageUri)
+    .then(image =>
+      image.export("image/jpeg", {
+        background: "#000000",
+        quality: 97
+      })
+    )
+    .then(buffer => outbox.enqueue(`${Date.now()}.jpg`, buffer))
+    .then(fileTransfer => {
+      logInfo(`Enqueued ${fileTransfer.name}`);
+    });
+}
+
 settingsStorage.addEventListener("change", evt => {
-  if (evt.oldValue !== evt.newValue) {
+  if (evt.key === "backgroundImage") {
+    compressAndTransferImage(evt.newValue);
+  } else if (evt.oldValue !== evt.newValue) {
     sendValue(evt.key, evt.newValue);
     cryptoCompanion.onSettingChange(evt.key);
   }
@@ -51,4 +75,9 @@ messaging.peerSocket.onmessage = function(evt) {
 
 messaging.peerSocket.onerror = function(err) {
   logError("Connection error: " + err.code + " - " + err.message);
+}
+
+if (me.launchReasons.wokenUp) {
+  logInfo("Started due to wake interval!");
+  cryptoCompanion.tryPushFromCompanionIfRequeryAllowed();
 }

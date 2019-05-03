@@ -8,29 +8,40 @@ export let TimeIndicator = function(document, settings) {
   
   let timeEl = document.getElementById("time");
   let dateEl = document.getElementById("date"); 
-
+  let amPmEl = document.getElementById("amPm");
+  
   self.drawTime = function(now) {
     var hours = now.getHours();
-    var amPm = "";
-    if (preferences.clockDisplay === "12h" || settings.isTrue("isAmPm")) {
-      // 12h format    
-      if (settings.isTrue("isAmPm")) {
-        if (hours < 12) {
-          amPm = " AM";
-        } else {
-          amPm = " PM";
-        }
+   
+    let isAmPm = preferences.clockDisplay === "12h" || settings.isTrue("isAmPm");
+    
+    if (isAmPm) {
+      // 12h format      
+      var amPm = "";   
+      if (hours < 12) {
+        amPm = "AM";
+      } else {
+        amPm = "PM";
       }
-
-      hours = hours % 12 || 12;    
+      amPmEl.text = amPm;
+      amPmEl.style.display = "inline";
+      hours = util.monoDigits(hours % 12 || 12);    
     } else {
       // 24h format
-      hours = util.zeroPad(hours);
+      amPmEl.style.display = "none";      
+      hours = util.monoDigits(hours);
     }
-    let mins = util.zeroPad(now.getMinutes());
-
-    timeEl.text = `${hours}:${mins}${amPm}`;
-
+    
+    let mins = util.monoDigits(now.getMinutes());
+    
+    
+    if (settings.isTrue("isShowSeconds")) {
+      let seconds = util.monoDigits(now.getSeconds());
+      timeEl.text = `${hours}:${mins}:${seconds}`;
+    } else {
+      timeEl.text = `${hours}:${mins}`;
+    }
+    
     let day = now.getDate();
     let monthIndex = now.getMonth() + 1;
 

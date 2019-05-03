@@ -16,33 +16,50 @@ import { ProgressIndicators }  from "./progress-indicators"
 import { BatteryIndicator }  from "./battery-indicator"
 import { TimeIndicator }  from "./time-indicator"
 import { CryptoIndicator } from "./crypto-indicator"
+import { Background } from "./background"
 import { locale } from "user-settings";
 import { vibration } from "haptics";
+import { Barometer } from "barometer";
+import { inbox } from "file-transfer";
 
 clock.granularity = "minutes";
 
 let root = document.getElementById('root');
-let backgroundEl = document.getElementById('background')
 
 const screenHeight = root.height //250 - Ionic, 300 - Versa
 const screenWidth = root.width
 let isLongScreen = screenHeight >= 300; //Versa and possible future devices
+let isElevation = !! Barometer; //Versa lite does not have it
 
 const SETTINGS_FILE = MODE.screenshotMode ? "settingsVS.cbor":"settingsV1.cbor";
 
 let settings = new Settings(SETTINGS_FILE, function() {
   var defaults = {
-      isShowStepsProgress: true,
-      isFastProgress: false,
-      language: 'en',
-      dateFormat: "DD.MM",
-      distanceUnit: "m",
-      isShowDistanceUnit: false
-    };
-    if (units.distance === "us") {
-      defaults.distanceUnit = "mi";
-      defaults.dateFormat = "MM.DD"; 
-    }   
+    isShowStepsProgress: true,
+    isFastProgress: false,
+    language: 'en',
+    dateFormat: "DD.MM",
+    distanceUnit: "m",
+    isShowDistanceUnit: false,
+    isShowSeconds: false,
+    goal0: "steps",
+    goal1: "distance",
+    goal2: "elevationGain",
+    goal3: "calories",
+    goal4: "activeMinutes"
+  };
+  if (units.distance === "us") {
+    defaults.distanceUnit = "mi";
+    defaults.dateFormat = "MM.DD"; 
+  }   
+  if (!isElevation) {
+    defaults.goal2 = "calories";
+    defaults.goal3 = "activeMinutes";
+    defaults.goal4 = "NONE";
+  }  
+  if (!isLongScreen) {
+    defaults.goal4 = "NONE";
+  }  
   return defaults;
 });
 
@@ -56,7 +73,7 @@ let stepsProgress = new StepsProgress(
 
 let progressIndicators = new ProgressIndicators(document, settings, stepsProgress);
 
-let hrmAnimation = new HrmAnimation(document);
+let hrmAnimation = new HrmAnimation(document, settings);
 
 let batteryIndicator = new BatteryIndicator(document);
 
@@ -64,6 +81,9 @@ let timeIndicator = new TimeIndicator(document, settings);
 
 let cryptoIndicator = new CryptoIndicator(document, settings);
 
+let background = new Background(document, settings);
+
+var isBackgroundImageMode = background.tryRecoverImage("black");
 var isFastProgress = false;
 var fastProgressInterval = null;
 let initFastProgressInterval = function() {
@@ -118,44 +138,61 @@ let applySettings = function() {
     } else {
       stepsProgress.clearUpdates();
     }
+    
+    if (settings.isTrue("isShowSeconds")) {
+      clock.granularity = "seconds";
+    } else {
+      clock.granularity = "minutes";
+    }
 
+    var newGoalTypes = [
+      settings.getOrElse("goal0", "steps"),
+      settings.getOrElse("goal1", "distance"),
+      settings.getOrElse("goal2", "elevationGain"),
+      settings.getOrElse("goal3", "calories"),
+      settings.getOrElse("goal4", "activeMinutes")      
+    ];
+    
     if (isLongScreen) {
       if (isCryptoMode()) {
-        progressIndicators.toggleItem(3, true);
-        progressIndicators.toggleItem(4, false);
+        newGoalTypes[4] = "NONE";
         cryptoIndicator.initUpdates();
       } else {
-        progressIndicators.toggleItem(3, true);
-        progressIndicators.toggleItem(4, true);
         cryptoIndicator.clearUpdates();
       }
     } else {
+      newGoalTypes[4] = "NONE";
       if (isCryptoMode()) {
-        progressIndicators.toggleItem(3, false);
-        progressIndicators.toggleItem(4, false);
+        newGoalTypes[3] = "NONE";
         cryptoIndicator.initUpdates();
       } else {
-        progressIndicators.toggleItem(3, true);
-        progressIndicators.toggleItem(4, false);
         cryptoIndicator.clearUpdates();
       }
     }
+    
     cryptoIndicator.refreshUi();
         
     settings.ifPresent("otherLabelsColor", function(otherLabelsColor) {
       root.style.fill = otherLabelsColor;
     });
-        
-    settings.ifPresent("backgroundColor", function(backgroundColor) {
-      backgroundEl.style.fill = backgroundColor; 
-      batteryIndicator.setColor(backgroundColor);
-    });
+ 
+    let backgroundColor = settings.getOrElse("backgroundColor", "black");    
     
+    if (isBackgroundImageMode) {
+      isBackgroundImageMode = background.tryRecoverImage(backgroundColor);
+    } else { 
+      background.setColor(backgroundColor);   
+    } 
+
+    batteryIndicator.setColor(backgroundColor); 
+
     settings.ifPresent("heartColor", hrmAnimation.setColor);   
     
     settings.ifPresent("ccLogosColor", cryptoIndicator.setLogosColor);
-        
-    progressIndicators.applyGoalTypeSettings();
+    
+    hrmAnimation.onSettingsChange();
+            
+    progressIndicators.applyGoalTypeSettings(newGoalTypes);
     progressIndicators.forceDrawAllProgress();
     applyState();
     logInfo("Settings applied");
@@ -174,6 +211,12 @@ messaging.peerSocket.addEventListener("message", function(evt) {
     logInfo("Settings received");
     let newSettingsSource = {};  
     newSettingsSource[evt.data.key] = evt.data.value;
+    logInfo(evt.data.key);
+    if (evt.data.key == "backgroundColor") {
+      logInfo("Background color selected, resetting image");
+      isBackgroundImageMode = false;
+    }
+    
     settings.replaceSettings(newSettingsSource);
     applySettings();
     timeIndicator.drawTime(new Date());
@@ -199,11 +242,10 @@ root.onclick = function(e) {
       prevManualRefresh = now;
       logInfo("Manual refresh by tap");
       vibration.start("bump");
-      //progressIndicators.drawAllProgress();
+      progressIndicators.drawAllProgress();
       cryptoIndicator.fetch(true);
   }
 }
-
 
 messaging.peerSocket.onopen = function() {
 
@@ -215,4 +257,14 @@ appbit.addEventListener("unload", function() {
   cryptoIndicator.persist();
 });
 
+
+inbox.addEventListener("newfile", function() {
+  let fileName;
+  while (fileName = inbox.nextFile()) {
+    let imagePath = `/private/data/${fileName}`;
+    logInfo(`${imagePath} is now available`);
+    background.setImage(imagePath);
+    isBackgroundImageMode = true;
+  }
+});
 

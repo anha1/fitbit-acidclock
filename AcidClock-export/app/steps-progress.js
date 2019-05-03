@@ -9,7 +9,7 @@ let loadStepsOnHourStartData = function() {
   try {
     return fs.readFileSync(SETTINGS_FILE, SETTINGS_TYPE);
   } catch (ex) {
-    logInfo("Can't load steps on hour start");    
+    // ignore, it is ok on first load   
   }
 }
 

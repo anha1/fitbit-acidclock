@@ -74,7 +74,7 @@ export let CryptoCompanion = function() {
     return MODE.isForceCryptoMode || "true" === settingsStorage.getItem("isShowCc");
   }
   
-  self.push = function(leftCc, rightCc) {
+  self.push = function() {
     let leftCc = getOrElse("leftCc", "btc");
     let rightCc = getOrElse("rightCc", "eth");   
     lastApiQuery = (new Date()).getTime();

@@ -1,9 +1,14 @@
 <svg id="root">
-  <rect id="background" /> 
+  <rect id="background" />
+  <image id="backgroundImage" width="100%" height="100%"/>
 
   <text id="time"/>
+  <text id="amPm"/>
   <text id="date"/>
      
+  <g id="restingHr"> 
+    <text id="hr-resting-count" class="count sideCount">56</text>
+  </g>  
   <g id="hr"> 
     <text id="hr-count" class="count sideCount">56</text>    
     <image id="hr-icon-systole" class="icon" href="stat_hr_solid_24px.png" />
@@ -17,45 +22,45 @@
     <rect id="bat-fill"/>
     <text id="bat-count" class="count sideCount">87</text>   
   </g> 
-  <g id="steps">
+  <g id="goal0">
     <rect class="bg"/>  
     <circle class="tgt-no"/>  
     <circle class="tgt-yes"/>  
     <rect class="progress"/>  
-    <text class="count">777</text>
+    <text class="count">8888</text>
     <image  class="icon" href="stat_steps_solid_24px.png" />
   </g>
-  <g id="distance">
+  <g id="goal1">
     <rect class="bg"/>  
     <circle class="tgt-no"/>  
     <circle class="tgt-yes"/>  
     <rect class="progress"/>    
-    <text class="count">777</text>
-    <image id="distance-icon" class="icon" href="stat_dist_solid_24px.png" />
+    <text class="count">8888</text>
+    <image class="icon" href="stat_dist_solid_24px.png" />
   </g>
-  <g id="elevationGain">
+  <g id="goal2">
     <rect class="bg"/>  
     <circle class="tgt-no"/>  
     <circle class="tgt-yes"/>  
     <rect class="progress"/>    
-    <text class="count">777</text>
-    <image id="elevationGain-icon" class="icon" href="stat_floors_solid_24px.png" />
+    <text class="count">8888</text>
+    <image class="icon" href="stat_floors_solid_24px.png" />
   </g>
-  <g id="calories">
+  <g id="goal3">
     <rect class="bg"/>  
     <circle class="tgt-no"/>  
     <circle class="tgt-yes"/>  
     <rect class="progress"/>    
-    <text class="count">777</text>
-    <image id="calories-icon" class="icon" href="stat_cals_solid_24px.png" />
+    <text class="count">8888</text>
+    <image class="icon" href="stat_cals_solid_24px.png" />
   </g> 
-  <g id="activeMinutes">
+  <g id="goal4">
     <rect class="bg"/>  
     <circle class="tgt-no"/>  
     <circle class="tgt-yes"/>  
     <rect class="progress"/>    
-    <text class="count">777</text>
-    <image id="activeMinutes-icon" class="icon" href="stat_am_solid_24px.png" />
+    <text class="count">8888</text>
+    <image class="icon" href="stat_am_solid_24px.png" />
   </g>
   
   <rect id="crypto-container"> 

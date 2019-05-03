@@ -13,12 +13,26 @@
 
 #time {
   font-size: 48;
-  font-family: Colfax-Medium;
+  font-family: Seville-Regular;
   text-length: 32;
   text-anchor: middle;
   x: 50%;
   y: 40;
   fill: white;
+}
+
+#amPm {
+  font-size: 32;
+  font-family: Seville-Regular;
+  text-length: 32;
+  text-anchor: end;
+  x: 99%;
+  y: 29;
+  fill: white;
+}
+
+#restingHr {
+  transform: translate(100%-78,93)
 }
 
 #hr {
@@ -29,21 +43,26 @@
   transform: translate(100%-78,163);
 }
 
-#steps {
+#goal0 {
   transform: translate(5,83);  
+  fill: gold;
 }
 
-#distance {
-  transform: translate(5,123)
+#goal1 {
+  transform: translate(5,123);
+  fill: yellowgreen;
 }
-#elevationGain  {
-  transform: translate(5,163)
+#goal2  {
+  transform: translate(5,163);
+  fill: skyblue;
 }
-#calories  {
-  transform: translate(5,203)
+#goal3  {
+  transform: translate(5,203);
+  fill: violet;
 }
-#activeMinutes {
-  transform: translate(5,243)
+#goal4 {
+  transform: translate(5,243);
+  fill: orange;
 }
 
 #crypto-left {
@@ -95,8 +114,8 @@
 }
 
 .progress {
-  x:26;
-  y:29;
+  x: 26;
+  y: 29;
   height: 5;
   width: 10;
 }
@@ -134,26 +153,6 @@
   y: 25;
   text-length: 15; 
   font-family: Fabrikat-Bold;
-}
-
-#steps {  
-  fill: gold;
-}
-
-#distance {
-  fill: yellowgreen;
-}
-
-#elevationGain {
-  fill: skyblue;
-}
-
-#calories {
-  fill: violet;
-}
-
-#activeMinutes {
-  fill: orange;
 }
 
 #hr-icon-systole {

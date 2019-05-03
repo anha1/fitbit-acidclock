@@ -9,19 +9,22 @@
       "access_activity",
       "access_heart_rate",
       "access_internet",
-      "run_background"
+      "run_background",
+      "access_user_profile"
     ],
     "buildTargets": [
       "higgs",
-      "meson"
+      "meson",
+      "gemini"
     ],
     "i18n": {
       "en": {
         "name": "AcidClock"
       }
-    }
+    },
+    "defaultLanguage": "en-US"
   },
   "devDependencies": {
-    "@fitbit/sdk": "~1.0.0"
+    "@fitbit/sdk": "~3.1.0"
   }
 }

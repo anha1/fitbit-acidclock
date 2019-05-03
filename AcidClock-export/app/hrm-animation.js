@@ -1,12 +1,15 @@
 import { HeartRateSensor } from "heart-rate";
+import { user } from "user-profile";
 
-export let HrmAnimation = function(document) {
+export let HrmAnimation = function(document, settings) {
   let self = this;  
   let hrEl = document.getElementById("hr");
   let hrIconSystoleEl = document.getElementById("hr-icon-systole");
   let hrIconDiastoleEl = document.getElementById("hr-icon-diastole");
   let hrCountEl = document.getElementById("hr-count");  
-  
+  let hrRestingEl = document.getElementById("restingHr");  
+  let hrRestingCountEl = document.getElementById("hr-resting-count");  
+    
   let hrm = new HeartRateSensor();
 
   var hrmAnimationPhase = false;
@@ -24,6 +27,18 @@ export let HrmAnimation = function(document) {
      hrEl.style.display = "none";
   }
 
+  let tryShowRestingBpm = function() {
+    if (user && settings.isTrue("isShowRestingBpm")) {
+        let restingBpm = user.restingHeartRate;
+        if (restingBpm) {
+          hrRestingCountEl.text = restingBpm;  
+          hrRestingCountEl.style.display = "inline"; 
+        }
+    } else {
+      hrRestingCountEl.style.display = "none"; 
+    }        
+  }
+        
   let showHr = function() {  
     // updating HRM readings
     hrmRate = hrm.heartRate;
@@ -35,6 +50,7 @@ export let HrmAnimation = function(document) {
         hrEl.style.display = "inline";    
         animateHr();
       }
+      tryShowRestingBpm();
     } else {
       hideHr();
     }
@@ -88,5 +104,9 @@ export let HrmAnimation = function(document) {
     if (!hrmRate) {
       hideHr()    
     }
+  }
+  
+  self.onSettingsChange = function() {
+    tryShowRestingBpm();
   }
 }

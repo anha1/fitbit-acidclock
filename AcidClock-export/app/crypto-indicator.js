@@ -15,7 +15,7 @@ let unpersistLastReadings = function() {
       return rs;
     }
   } catch (ex) {
-    //ignore
+    // ignore, it is ok on first load
   }
   logInfo("CI: Can't load old crypto data");    
   return null;  

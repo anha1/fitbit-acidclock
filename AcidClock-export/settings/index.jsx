@@ -1,6 +1,9 @@
 import { MODE } from "../common/mode";
 
 function mySettings(props) {
+  let screenWidth = props.settingsStorage.getItem("screenWidth");
+  let screenHeight = props.settingsStorage.getItem("screenHeight");
+  
   let colorSet = [
     {color: "#FF00FF"},   
     {color: "#FFFF00"},  
@@ -60,6 +63,15 @@ function mySettings(props) {
     {name:"Stellar Lumens (XLM)",  value: "xlm"}  
   ];  
   
+  let goalTypes = [
+    {name:"NONE",  value: "NONE"},
+    {name:"Steps",  value: "steps"},
+    {name:"Distance",  value: "distance"},
+    {name:"Elevation",  value: "elevationGain"},
+    {name:"Calories",  value: "calories"},
+    {name:"Active Minutes",  value: "activeMinutes"},   
+  ];
+  
   return (
     <Page>
       <Select
@@ -84,7 +96,7 @@ function mySettings(props) {
         {value:"sw", name:"Swahili"}
       ]}
       />
-      
+            
       <Select
       label="Date Format"
       settingsKey="dateFormat"
@@ -107,6 +119,11 @@ function mySettings(props) {
       />
       
       <Toggle
+         settingsKey="isShowSeconds"
+         label="Show Seconds"
+      />
+      
+      <Toggle
          settingsKey="isShowDistanceUnit"
          label="Show Distance Unit label"
       />
@@ -120,6 +137,28 @@ function mySettings(props) {
          settingsKey="isAmPm"
          label="AM/PM indication on 12-hour clock"
       />
+      
+      <Toggle
+         settingsKey="isShowRestingBpm"
+         label="Show resting hearth rate"
+      />
+      
+      <ImagePicker
+        title="Background Image"
+        description="Pick an image to use as your background."
+        label="Pick a Background Image"
+        sublabel="Select a Background color to reset"
+        settingsKey="backgroundImage"
+        imageWidth={ screenWidth }
+        imageHeight={ screenHeight }
+      />
+      
+      <Section
+        title="Background color">
+        <ColorSelect
+          settingsKey="backgroundColor"
+          colors={colorSet} />
+      </Section>
       
       <Section
         title="Time color">
@@ -183,13 +222,35 @@ function mySettings(props) {
           settingsKey="otherLabelsColor"
           colors={colorSet} />
       </Section>
-      
-      <Section
-        title="Background color">
-        <ColorSelect
-          settingsKey="backgroundColor"
-          colors={colorSet} />
-      </Section>
+            
+      <Section title="Goals">   
+        <Select
+          label="Goal 1"
+          settingsKey="goal0"
+          options={goalTypes}
+        />
+        <Select
+          label="Goal 2"
+          settingsKey="goal1"
+          options={goalTypes}
+        />
+        <Select
+          label="Goal 3"
+          settingsKey="goal2"
+          options={goalTypes}
+        />
+        <Select
+          label="Goal 4"
+          settingsKey="goal3"
+          options={goalTypes}
+        />
+        <Select
+          label="Goal 5"
+          settingsKey="goal4"
+          options={goalTypes}
+        />
+        
+      </Section>  
       
       <Section title="Cryptocurrencies">   
         <Toggle
@@ -206,10 +267,10 @@ function mySettings(props) {
           settingsKey="rightCc"
           options={ccOptions}
         />
-        <Text>Prices are in USD and are taken from Kraken exchange.</Text>
+        <Text>Prices are shown in USD and are taken from Kraken exchange.</Text>
         <Text>For a manual refresh, tap on a screen (not faster than once in 30 seconds).</Text>
         <Text>Auto refresh attempt: once in 10 min (when the screen is on).</Text>
-        <Text>Max age of the data displayed: 30 min (so if no prices are displayed, there are some thechnical issues and it would be better to temporary disable the feature).</Text>       
+        <Text>Max age of the data displayed: 30 min.</Text>       
       </Section>      
 
       <Section title="CC Logos color">
@@ -221,9 +282,8 @@ function mySettings(props) {
       <Section
         title="About">
         <Text>
-          AcidClock is be free, ads-free and open-source.
+          AcidClock is free, ads-free and open-source. Made in Ukraine.
         </Text>
-        <Link source="mailto:anton.haidai@gmail.com">Feedback email</Link>
         <Link source="https://github.com/anha1/fitbit-acidclock">Source code on GitHub</Link>
         <Link source="https://live.blockcypher.com/btc/address/15psz93USaEUrkdhmZDH5tmYywvHLJ75zx/">Bitcoin tip jar</Link>
         <Link source="https://etherscan.io/address/0x96BDD795aAcAe880AbB9E3f8AA9153BFfd3d026D">Ethereum tip jar</Link>
