@@ -42,6 +42,7 @@ let settings = new Settings(SETTINGS_FILE, function() {
     distanceUnit: "m",
     isShowDistanceUnit: false,
     isShowSeconds: false,
+    isVibrationOnCcErRefresh: true,
     goal0: "steps",
     goal1: "distance",
     goal2: "elevationGain",
@@ -184,8 +185,6 @@ let applySettings = function() {
       background.setColor(backgroundColor);   
     } 
 
-    batteryIndicator.setColor(backgroundColor); 
-
     settings.ifPresent("heartColor", hrmAnimation.setColor);   
     
     settings.ifPresent("ccLogosColor", cryptoIndicator.setLogosColor);
@@ -202,6 +201,12 @@ let applySettings = function() {
 }
 
 applySettings();
+
+let doCcErFeedback = function() {
+  if (display.on && settings.isTrue("isVibrationOnCcErRefresh")) {
+    vibration.start("bump");
+  }
+}
 
 messaging.peerSocket.addEventListener("message", function(evt) {  
   if (!evt.data.hasOwnProperty("type")) {
@@ -223,6 +228,7 @@ messaging.peerSocket.addEventListener("message", function(evt) {
   }
   if (evt.data.type === "CCER") {
     logInfo("Cryptocurrency exchange rate message has been received by the device");
+    doCcErFeedback();
     cryptoIndicator.onResponse(evt.data);
   }
 })
@@ -240,8 +246,8 @@ root.onclick = function(e) {
         }
       }
       prevManualRefresh = now;
-      logInfo("Manual refresh by tap");
-      vibration.start("bump");
+      logInfo("Manual refresh by tap");    
+      doCcErFeedback();      
       progressIndicators.drawAllProgress();
       cryptoIndicator.fetch(true);
   }

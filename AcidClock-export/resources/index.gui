@@ -15,10 +15,7 @@
     <image id="hr-icon-diastole" class="icon" href="stat_hr_solid_24px.png" />
   </g>  
   <g id="bat"> 
-    <g id="bat-shell">
-      <rect id="bat-body"/>
-      <rect id="bat-head"/>
-    </g>
+    <image id="bat-icon" class="icon" href="battery_24px.png" />
     <rect id="bat-fill"/>
     <text id="bat-count" class="count sideCount">87</text>   
   </g> 

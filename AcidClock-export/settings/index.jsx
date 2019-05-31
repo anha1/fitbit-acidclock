@@ -257,6 +257,10 @@ function mySettings(props) {
          settingsKey="isShowCc"
          label="Show Cryptocurrencies"
         />   
+        <Toggle
+         settingsKey="isVibrationOnCcErRefresh"
+         label="Vibration on refresh"
+        />
         <Select
           label="Left CC"
           settingsKey="leftCc"
