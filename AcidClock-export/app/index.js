@@ -203,7 +203,7 @@ let applySettings = function() {
 applySettings();
 
 let doCcErFeedback = function() {
-  if (display.on && settings.isTrue("isVibrationOnCcErRefresh")) {
+  if (display.on && (settings.isTrue("isVibrationOnCcErRefresh") || MODE.isForceCryptoMode)) {
     vibration.start("bump");
   }
 }
@@ -235,12 +235,13 @@ messaging.peerSocket.addEventListener("message", function(evt) {
 
 
 let prevManualRefresh = null;
+
 root.onclick = function(e) {  
   if (isCryptoMode() && messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {      
       let now = (new Date()).getTime(); 
       if (prevManualRefresh) {
         let refreshDiff = now - prevManualRefresh;
-        if (refreshDiff < 30000) {
+        if (refreshDiff < 15000) {
           logInfo("Rejecting manual refresh by a tap: too fast");
           return;
         }

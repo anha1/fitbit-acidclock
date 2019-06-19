@@ -40,8 +40,8 @@ export let CryptoIndicator = function(document, settings) {
   var isEnabled = false;
   var lastReadings = unpersistLastReadings();
   
-  var outdatedReadingsMinutes = 30;
-  var staleReadingsMintutes = 10;
+  var outdatedReadingsMinutes = 60;
+  var fetchIfStaleLimitMs = 5000;
   
   let formatCcer = function (value) {
     var float = parseFloat(value);
@@ -103,17 +103,22 @@ export let CryptoIndicator = function(document, settings) {
     drawData(lastReadings.data);
   }
   
-  self.onResponse = function(data) {
-    drawData(data);
+  self.onResponse = function(data) { 
     lastReadings = {
       data: data,
       time: (new Date()).getTime()
     };    
+    drawData(lastReadings.data);
   }
+  
+
   
   self.fetch = function(isForce) {
     if (isEnabled && messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
-      logInfo("Making CC fetch request");
+   
+   
+      
+      logInfo("Making CC fetch request");            
       messaging.peerSocket.send({
         command: 'CCER',
         isForce: isForce
@@ -123,11 +128,21 @@ export let CryptoIndicator = function(document, settings) {
     }
   }
   
+  var lastFetchIfStale = null;
+  
   self.fetchIfStale = function() {    
     if (isEnabled && messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
       if (lastReadings && lastReadings.time) {
         let now = (new Date()).getTime(); 
+        if (lastFetchIfStale && (now - lastFetchIfStale < fetchIfStaleLimitMs)) {
+          logInfo("fetchIfStale ignored");  
+          return;
+        }      
+        lastFetchIfStale = now;
+        
         let readingsDiff = now - lastReadings.time;
+        let staleReadingsMintutes = parseInt(settings.getOrElse("autoRefreshIntervalCc", "15"));
+        logInfo("staleReadingsMintutes: " + staleReadingsMintutes);
         if (readingsDiff > staleReadingsMintutes * MILLISECONDS_PER_MINUTE) {
           logInfo("CI: readings are stale, triggering a soft fetch");
           self.fetch(false);

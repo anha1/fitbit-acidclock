@@ -101,8 +101,13 @@ function mySettings(props) {
       label="Date Format"
       settingsKey="dateFormat"
       options={[
-        {name:"DD.MM", value:"DD.MM"},
-        {name:"MM.DD", value:"MM.DD"}   
+        {value:"DD.MM", name:"Monday 31.12"},
+        {value:"MM.DD", name:"Monday 12.31"},
+        {value:"SW DD.MM", name:"Mon 31.12"},
+        {value:"SW MM.DD", name:"Mon 12.31"},
+        {value:"SW DD SM", name:"Mon 31 Dec"},
+        {value:"SW DD LM", name:"Mon 31 December"},
+           {value:"DD LM", name:"31 December"}
       ]}
       />
       
@@ -262,6 +267,19 @@ function mySettings(props) {
          label="Vibration on refresh"
         />
         <Select
+        label="Auto refresh interval (when the screen is on)"
+        settingsKey="autoRefreshIntervalCc"
+        options={[
+          {value:"1", name:"1 minute"},
+          {value:"3", name:"3 minutes"},
+          {value:"5", name:"5 minutes"},
+          {value:"10", name:"10 minutes"},
+          {value:"20", name:"20 minutes"},
+          {value:"30", name:"30 minutes"},
+          {value:"45", name:"45 minutes"}            
+        ]}
+        />
+        <Select
           label="Left CC"
           settingsKey="leftCc"
           options={ccOptions}
@@ -271,10 +289,11 @@ function mySettings(props) {
           settingsKey="rightCc"
           options={ccOptions}
         />
+
+        
         <Text>Prices are shown in USD and are taken from Kraken exchange.</Text>
-        <Text>For a manual refresh, tap on a screen (not faster than once in 30 seconds).</Text>
-        <Text>Auto refresh attempt: once in 10 min (when the screen is on).</Text>
-        <Text>Max age of the data displayed: 30 min.</Text>       
+        <Text>For a manual refresh, tap on a screen (not faster than once in 15 seconds).</Text>
+        <Text>Max age of the data displayed: 1 hour.</Text>       
       </Section>      
 
       <Section title="CC Logos color">

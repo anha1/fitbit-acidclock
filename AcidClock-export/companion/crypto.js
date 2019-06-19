@@ -7,10 +7,6 @@ import { me as companion} from "companion"
 
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 
-var lastApiQuery = null;
-var cachedResponse = null;
-var minApiRequeryIntervalMinutes = 5; //forced updates ignore it
-
 let ccKrakenMapping = {
   "btc": {key: "XXBTZUSD", query: "XBTUSD"},
   "eth": {key: "XETHZUSD", query: "ETHUSD"},
@@ -58,7 +54,6 @@ let queryCcer = function(leftCc, rightCc, callback) {
           rightCc: rightCc,
           type: "CCER"
         }
-        cachedResponse = ccer;
         returnCcer(ccer);
       });
   })
@@ -76,33 +71,18 @@ export let CryptoCompanion = function() {
   
   self.push = function() {
     let leftCc = getOrElse("leftCc", "btc");
-    let rightCc = getOrElse("rightCc", "eth");   
-    lastApiQuery = (new Date()).getTime();
+    let rightCc = getOrElse("rightCc", "eth");  
     queryCcer(leftCc, rightCc);   
   }
   
-  self.tryPushFromCompanionIfRequeryAllowed = function() {
-    if (!self.isEnabled()) {
+  self.tryPushIfAllowed = function() {
+    if (!(self.isEnabled() && (messaging.peerSocket.readyState === messaging.peerSocket.OPEN))) {
       return;
-    } 
-    if (lastApiQuery) {
-      let now = (new Date()).getTime(); 
-      let diff = now - lastApiQuery;
-      if (diff > Math.max(MILLISECONDS_PER_MINUTE, minApiRequeryIntervalMinutes * MILLISECONDS_PER_MINUTE)) {
-        logInfo("CC: refresh is allowed: " + diff);
-        self.push();
-      } else {
-        if (cachedResponse) {
-            logInfo("CC: refresh is not allowed but there is a chached response: " + diff);
-            returnCcer(cachedResponse);
-        } else {            
-            logInfo("CC: refresh is not allowed and there is no chached response: " + diff);
-        }
-      } 
-    } else {
-      logInfo("CC: no refresh attempt recorded: requesting a fetch");
-      self.push();
     }
+    
+    logInfo("CC: requesting a fetch");
+    self.push();
+
   }
   
   let toggleWakeUp = function() {
@@ -123,15 +103,12 @@ export let CryptoCompanion = function() {
     }
     if ("leftCc" === key || "rightCc" === key) {
       logInfo("CC: currency changed"); 
-      // previous fetches will not work anymore
-      lastApiQuery = null;
-      cachedResponse = null;      
-      self.tryPushFromCompanionIfRequeryAllowed();
+      self.tryPushIfAllowed();
     }    
     
     if ("isShowCc" === key) {
       toggleWakeUp();
-      self.tryPushFromCompanionIfRequeryAllowed();
+      self.tryPushIfAllowed();
     } 
   }
 }

@@ -40,7 +40,7 @@ settingsStorage.addEventListener("change", evt => {
 });
 
 messaging.peerSocket.onopen = function() {  
-  cryptoCompanion.tryPushFromCompanionIfRequeryAllowed();
+  cryptoCompanion.tryPushIfAllowed();
 }
 
 function sendValue(key, val) {
@@ -68,7 +68,7 @@ messaging.peerSocket.onmessage = function(evt) {
       cryptoCompanion.push();
     } else {
       logInfo("Regular push requested");
-      cryptoCompanion.tryPushFromCompanionIfRequeryAllowed();
+      cryptoCompanion.tryPushIfAllowed();
     }    
   }
 }
@@ -79,5 +79,5 @@ messaging.peerSocket.onerror = function(err) {
 
 if (me.launchReasons.wokenUp) {
   logInfo("Started due to wake interval!");
-  cryptoCompanion.tryPushFromCompanionIfRequeryAllowed();
+  cryptoCompanion.tryPushIfAllowed();
 }
