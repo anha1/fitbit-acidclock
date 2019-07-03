@@ -43,6 +43,8 @@ let settings = new Settings(SETTINGS_FILE, function() {
     isShowDistanceUnit: false,
     isShowSeconds: false,
     isVibrationOnCcErRefresh: true,
+    isAmPm: true,
+    is12hourClock: false,
     goal0: "steps",
     goal1: "distance",
     goal2: "elevationGain",

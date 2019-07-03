@@ -42,6 +42,10 @@ export let Settings = function(settingsFile, defaultsSource) {
     return self.settingsSource.hasOwnProperty(key) && !!self.settingsSource[key];
   }
   
+  self.isFalse = function(key) {
+    return self.settingsSource.hasOwnProperty(key) && !self.settingsSource[key];
+  }
+  
   self.ifPresent = function(key, action) {
     let value = getRawValue(key);
     if (value) {

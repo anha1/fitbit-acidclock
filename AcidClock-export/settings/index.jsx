@@ -139,8 +139,13 @@ function mySettings(props) {
       />
       
       <Toggle
+         settingsKey="is12hourClock"
+         label="12-hour clock"
+      />
+      
+      <Toggle
          settingsKey="isAmPm"
-         label="AM/PM indication on 12-hour clock"
+         label="AM/PM indication (12-hour clock only)"
       />
       
       <Toggle

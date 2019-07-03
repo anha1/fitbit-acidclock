@@ -13,16 +13,17 @@ export let TimeIndicator = function(document, settings) {
   let getDateText = function(dateFormat, language, now) {   
     let day = now.getDate();
     let dayOfWeek = now.getDay();
-    let monthIndex = now.getMonth() + 1; 
+    let monthIndex = now.getMonth(); 
+    let monthNumber = now.getMonth() + 1;
     
     switch (dateFormat) {     
       case "SW DD.MM": { 
         let dayName = weekday.getShortWeekdayName(language, dayOfWeek);
-        return dayName + " " + util.zeroPad(day) + "." + util.zeroPad(monthIndex);  
+        return dayName + " " + util.zeroPad(day) + "." + util.zeroPad(monthNumber);  
       }
       case "SW MM.DD": {
         let dayName = weekday.getShortWeekdayName(language, dayOfWeek);
-        return dayName + " " + util.zeroPad(monthIndex) + "." + util.zeroPad(day); 
+        return dayName + " " + util.zeroPad(monthNumber) + "." + util.zeroPad(day); 
       }
       case "SW DD SM": {
         let dayName = weekday.getShortWeekdayName(language, dayOfWeek);
@@ -40,12 +41,12 @@ export let TimeIndicator = function(document, settings) {
       }         
       case "MM.DD": {
         let dayName = weekday.getWeekdayName(language, dayOfWeek);
-        return dayName + " " + util.zeroPad(monthIndex) + "." + util.zeroPad(day); 
+        return dayName + " " + util.zeroPad(monthNumber) + "." + util.zeroPad(day); 
       }
       case "DD.MM":
       default:  {
         let dayName = weekday.getWeekdayName(language, dayOfWeek);
-        return dayName + " " + util.zeroPad(day) + "." + util.zeroPad(monthIndex);
+        return dayName + " " + util.zeroPad(day) + "." + util.zeroPad(monthNumber);
       }
     }    
   }
@@ -53,19 +54,25 @@ export let TimeIndicator = function(document, settings) {
   self.drawTime = function(now) {
     var hours = now.getHours();
    
-    let isAmPm = preferences.clockDisplay === "12h" || settings.isTrue("isAmPm");
+    let is12hourClock = preferences.clockDisplay === "12h" || settings.isTrue("is12hourClock");
     
-    if (isAmPm) {
-      // 12h format      
-      var amPm = "";   
-      if (hours < 12) {
-        amPm = "AM";
+    let isAmPm = !settings.isFalse("isAmPm");
+    
+    if (is12hourClock) {
+      // 12h format    
+      hours = util.monoDigits(hours % 12 || 12);      
+      if (isAmPm) {
+        var amPm = "";   
+        if (hours < 12) {
+          amPm = "AM";
+        } else {
+          amPm = "PM";
+        }
+        amPmEl.text = amPm;
+        amPmEl.style.display = "inline";        
       } else {
-        amPm = "PM";
+        amPmEl.style.display = "none"; 
       }
-      amPmEl.text = amPm;
-      amPmEl.style.display = "inline";
-      hours = util.monoDigits(hours % 12 || 12);    
     } else {
       // 24h format
       amPmEl.style.display = "none";      
