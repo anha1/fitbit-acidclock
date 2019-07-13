@@ -45,6 +45,18 @@
   transform: translate(100%-78,93)
 }
 
+#bluetooth {
+  transform: translate(100%-78,203);
+}
+
+#bluetooth-icon-enabled {
+  display:none;
+} 
+
+#bluetooth-icon-disabled {
+  display:none;
+} 
+
 #hr {
   transform: translate(100%-78,123)
 }

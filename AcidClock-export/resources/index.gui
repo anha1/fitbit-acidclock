@@ -6,18 +6,22 @@
   <text id="amPm"/>
   <text id="date"/>
      
+  <g id="bluetooth"> 
+    <image id="bluetooth-icon-enabled" class="icon" href="bluetooth_enabled_24px.png" />
+    <image id="bluetooth-icon-disabled" class="icon" href="bluetooth_disabled_24px.png" />
+  </g>  
   <g id="restingHr"> 
-    <text id="hr-resting-count" class="count sideCount">56</text>
+    <text id="hr-resting-count" class="count sideCount">88</text>
   </g>  
   <g id="hr"> 
-    <text id="hr-count" class="count sideCount">56</text>    
+    <text id="hr-count" class="count sideCount">88</text>    
     <image id="hr-icon-systole" class="icon" href="stat_hr_solid_24px.png" />
     <image id="hr-icon-diastole" class="icon" href="stat_hr_solid_24px.png" />
   </g>  
   <g id="bat"> 
     <image id="bat-icon" class="icon" href="battery_24px.png" />
     <rect id="bat-fill"/>
-    <text id="bat-count" class="count sideCount">87</text>   
+    <text id="bat-count" class="count sideCount">88</text>   
   </g> 
   <g id="goal0">
     <rect class="bg"/>  

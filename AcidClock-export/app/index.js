@@ -16,6 +16,7 @@ import { ProgressIndicators }  from "./progress-indicators"
 import { BatteryIndicator }  from "./battery-indicator"
 import { TimeIndicator }  from "./time-indicator"
 import { CryptoIndicator } from "./crypto-indicator"
+import { BluetoothIndicator } from "./bluetooth-indicator"
 import { Background } from "./background"
 import { locale } from "user-settings";
 import { vibration } from "haptics";
@@ -36,7 +37,7 @@ const SETTINGS_FILE = MODE.screenshotMode ? "settingsVS.cbor":"settingsV1.cbor";
 let settings = new Settings(SETTINGS_FILE, function() {
   var defaults = {
     isShowStepsProgress: true,
-    isFastProgress: false,
+    isBluetoothIndicator: true,
     language: 'en',
     dateFormat: "DD.MM",
     distanceUnit: "m",
@@ -74,6 +75,15 @@ let stepsProgress = new StepsProgress(
   }
 );
 
+let isCryptoMode = function() {
+  return MODE.isForceCryptoMode || settings.isTrue("isShowCc"); 
+}
+
+let isForceNoBluetoothIndicator = function() {
+  // Ionic workaround: no space to show both CC and Bluetooth status
+  return !isLongScreen && isCryptoMode();
+}
+
 let progressIndicators = new ProgressIndicators(document, settings, stepsProgress);
 
 let hrmAnimation = new HrmAnimation(document, settings);
@@ -86,45 +96,33 @@ let cryptoIndicator = new CryptoIndicator(document, settings);
 
 let background = new Background(document, settings);
 
+let bluetoothIndicator = new BluetoothIndicator(document, settings, isForceNoBluetoothIndicator);
+
 var isBackgroundImageMode = background.tryRecoverImage("black");
-var isFastProgress = false;
-var fastProgressInterval = null;
-let initFastProgressInterval = function() {
-  clearInterval(fastProgressInterval);
-  fastProgressInterval = setInterval(progressIndicators.drawAllProgress, 5000);
-}
 
 let applyState = function() {
   if (display.on) {        
     hrmAnimation.start();
-    if (isFastProgress) {      
-      initFastProgressInterval()
-    } else {
-      clearInterval(fastProgressInterval);
-    }
+    bluetoothIndicator.draw();
     hrmAnimation.hideIfNoReadings();
     progressIndicators.drawAllProgress();
     cryptoIndicator.refreshUi();
     cryptoIndicator.fetchIfStale();
+    bluetoothIndicator.draw();
+    batteryIndicator.draw();
   } else {
-    hrmAnimation.stop(); 
-    clearInterval(fastProgressInterval);
+    hrmAnimation.stop();
   }  
 }
 
-display.onchange = applyState;
-
-clock.ontick = (evt) => {  
-  let now = evt.date;
-  timeIndicator.drawTime(now); 
-  progressIndicators.drawAllProgress();
-  batteryIndicator.draw();
-  cryptoIndicator.refreshUi();
-  cryptoIndicator.fetchIfStale();
+display.onchange = function() {
+  applyState();
 }
 
-let isCryptoMode = function() {
-  return MODE.isForceCryptoMode || settings.isTrue("isShowCc"); 
+clock.ontick = (evt) => {
+  let now = evt.date;
+  timeIndicator.drawTime(now); 
+  applyState();
 }
 
 let applySettings = function() {
@@ -257,7 +255,11 @@ root.onclick = function(e) {
 }
 
 messaging.peerSocket.onopen = function() {
+  applyState();
+}
 
+messaging.peerSocket.onclose = function() {
+  applyState();
 }
 
 appbit.addEventListener("unload", function() {

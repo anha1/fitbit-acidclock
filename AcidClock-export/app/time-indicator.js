@@ -1,6 +1,6 @@
 import { preferences } from "user-settings";
 import * as util from "../common/utils";
-import * as weekday from "../common/weekday";
+import * as weekday from "./weekday";
 import { MODE } from "../common/mode";
 
 export let TimeIndicator = function(document, settings) {
@@ -53,14 +53,14 @@ export let TimeIndicator = function(document, settings) {
   
   self.drawTime = function(now) {
     var hours = now.getHours();
-   
+    var hoursDisplayVal = hours;
     let is12hourClock = preferences.clockDisplay === "12h" || settings.isTrue("is12hourClock");
     
     let isAmPm = !settings.isFalse("isAmPm");
     
     if (is12hourClock) {
       // 12h format    
-      hours = util.monoDigits(hours % 12 || 12);      
+      hoursDisplayVal = hours % 12 || 12;      
       if (isAmPm) {
         var amPm = "";   
         if (hours < 12) {
@@ -75,18 +75,17 @@ export let TimeIndicator = function(document, settings) {
       }
     } else {
       // 24h format
-      amPmEl.style.display = "none";      
-      hours = util.monoDigits(hours);
-    }
+      amPmEl.style.display = "none";
+    }    
     
-    let mins = util.monoDigits(now.getMinutes());
-    
-    
+    let hoursMono = util.monoDigits(hoursDisplayVal);
+    let minsMono = util.monoDigits(now.getMinutes());
+        
     if (settings.isTrue("isShowSeconds")) {
-      let seconds = util.monoDigits(now.getSeconds());
-      timeEl.text = `${hours}:${mins}:${seconds}`;
+      let secondsMono = util.monoDigits(now.getSeconds());
+      timeEl.text = `${hoursMono}:${minsMono}:${secondsMono}`;
     } else {
-      timeEl.text = `${hours}:${mins}`;
+      timeEl.text = `${hoursMono}:${minsMono}`;
     }
     
     let dateFormat = settings.getOrElse("dateFormat", "DD.MM");
@@ -98,6 +97,7 @@ export let TimeIndicator = function(document, settings) {
   
   self.setTimeColor = function(timeColor) {
     timeEl.style.fill = timeColor;
+    amPmEl.style.fill = timeColor;
   }
         
   self.setDateColor = function(dateColor) {

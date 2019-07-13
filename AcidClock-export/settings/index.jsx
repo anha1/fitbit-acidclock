@@ -139,6 +139,11 @@ function mySettings(props) {
       />
       
       <Toggle
+         settingsKey="isBluetoothIndicator"
+         label="Show Bluetooth status"
+      />
+            
+      <Toggle
          settingsKey="is12hourClock"
          label="12-hour clock"
       />
@@ -313,8 +318,9 @@ function mySettings(props) {
           AcidClock is free, ads-free and open-source. Made in Ukraine.
         </Text>
         <Link source="https://github.com/anha1/fitbit-acidclock">Source code on GitHub</Link>
-        <Link source="https://live.blockcypher.com/btc/address/15psz93USaEUrkdhmZDH5tmYywvHLJ75zx/">Bitcoin tip jar</Link>
+        <Link source="https://live.blockcypher.com/btc/address/15psz93USaEUrkdhmZDH5tmYywvHLJ75zx">Bitcoin tip jar</Link>
         <Link source="https://etherscan.io/address/0x96BDD795aAcAe880AbB9E3f8AA9153BFfd3d026D">Ethereum tip jar</Link>
+        <Link source="https://live.blockcypher.com/ltc/address/LTtfQuChmcwVptF98WZeJbUdGJW3TuNxn3">Litecoin tip jar</Link>
       </Section>         
     </Page>    
   );

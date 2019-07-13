@@ -115,9 +115,6 @@ export let CryptoIndicator = function(document, settings) {
   
   self.fetch = function(isForce) {
     if (isEnabled && messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
-   
-   
-      
       logInfo("Making CC fetch request");            
       messaging.peerSocket.send({
         command: 'CCER',
