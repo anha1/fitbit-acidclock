@@ -2,6 +2,7 @@ import { preferences } from "user-settings";
 import * as util from "../common/utils";
 import * as weekday from "./weekday";
 import { MODE } from "../common/mode";
+import exercise from "exercise";
 
 export let TimeIndicator = function(document, settings) {
   let self = this;
@@ -56,7 +57,9 @@ export let TimeIndicator = function(document, settings) {
     var hoursDisplayVal = hours;
     let is12hourClock = preferences.clockDisplay === "12h" || settings.isTrue("is12hourClock");
     
-    let isAmPm = !settings.isFalse("isAmPm");
+    let isForceNoAmPm = exercise && exercise.state != "stopped";
+    
+    let isAmPm = !(isForceNoAmPm || settings.isFalse("isAmPm"));
     
     if (is12hourClock) {
       // 12h format    

@@ -17,6 +17,7 @@ import { BatteryIndicator }  from "./battery-indicator"
 import { TimeIndicator }  from "./time-indicator"
 import { CryptoIndicator } from "./crypto-indicator"
 import { BluetoothIndicator } from "./bluetooth-indicator"
+import { ExerciseIndicator } from "./exercise-indicator"
 import { Background } from "./background"
 import { locale } from "user-settings";
 import { vibration } from "haptics";
@@ -32,7 +33,7 @@ const screenWidth = root.width
 let isLongScreen = screenHeight >= 300; //Versa and possible future devices
 let isElevation = !! Barometer; //Versa lite does not have it
 
-const SETTINGS_FILE = MODE.screenshotMode ? "settingsVS.cbor":"settingsV1.cbor";
+const SETTINGS_FILE = isElevation ? "settingsV1.cbor" : "settingsV1lite.cbor";
 
 let settings = new Settings(SETTINGS_FILE, function() {
   var defaults = {
@@ -41,11 +42,12 @@ let settings = new Settings(SETTINGS_FILE, function() {
     language: 'en',
     dateFormat: "DD.MM",
     distanceUnit: "m",
-    isShowDistanceUnit: false,
+    isShowDistanceUnit: true,
     isShowSeconds: false,
     isVibrationOnCcErRefresh: true,
     isAmPm: true,
     is12hourClock: false,
+    isGps: true,
     goal0: "steps",
     goal1: "distance",
     goal2: "elevationGain",
@@ -79,8 +81,8 @@ let isCryptoMode = function() {
   return MODE.isForceCryptoMode || settings.isTrue("isShowCc"); 
 }
 
-let isForceNoBluetoothIndicator = function() {
-  // Ionic workaround: no space to show both CC and Bluetooth status
+let isCryptoOnShortScreen = function() {
+  // Ionic workaround: no space to show both CC and Bluetooth status / exercises
   return !isLongScreen && isCryptoMode();
 }
 
@@ -92,11 +94,18 @@ let batteryIndicator = new BatteryIndicator(document);
 
 let timeIndicator = new TimeIndicator(document, settings);
 
-let cryptoIndicator = new CryptoIndicator(document, settings);
+let cryptoIndicator = new CryptoIndicator(document, settings, isLongScreen);
+
+let exerciseIndicator = new ExerciseIndicator(document, settings, function() {
+  if (isCryptoOnShortScreen()) { 
+    cryptoIndicator.refreshUi();
+  }
+  timeIndicator.drawTime(new Date());
+})
 
 let background = new Background(document, settings);
 
-let bluetoothIndicator = new BluetoothIndicator(document, settings, isForceNoBluetoothIndicator);
+let bluetoothIndicator = new BluetoothIndicator(document, settings, isCryptoOnShortScreen);
 
 var isBackgroundImageMode = background.tryRecoverImage("black");
 
@@ -110,8 +119,10 @@ let applyState = function() {
     cryptoIndicator.fetchIfStale();
     bluetoothIndicator.draw();
     batteryIndicator.draw();
+    exerciseIndicator.applyState();
   } else {
     hrmAnimation.stop();
+    exerciseIndicator.stopRefresh();
   }  
 }
 
@@ -175,6 +186,7 @@ let applySettings = function() {
         
     settings.ifPresent("otherLabelsColor", function(otherLabelsColor) {
       root.style.fill = otherLabelsColor;
+      exerciseIndicator.setColor(otherLabelsColor);
     });
  
     let backgroundColor = settings.getOrElse("backgroundColor", "black");    
@@ -192,6 +204,7 @@ let applySettings = function() {
     hrmAnimation.onSettingsChange();
             
     progressIndicators.applyGoalTypeSettings(newGoalTypes);
+    exerciseIndicator.applyGoalTypeSettings(newGoalTypes);
     progressIndicators.forceDrawAllProgress();
     applyState();
     logInfo("Settings applied");
@@ -236,7 +249,7 @@ messaging.peerSocket.addEventListener("message", function(evt) {
 
 let prevManualRefresh = null;
 
-root.onclick = function(e) {  
+root.onclick = function(e) {
   if (isCryptoMode() && messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {      
       let now = (new Date()).getTime(); 
       if (prevManualRefresh) {
@@ -278,4 +291,8 @@ inbox.addEventListener("newfile", function() {
     isBackgroundImageMode = true;
   }
 });
+
+
+
+
 

@@ -1,3 +1,4 @@
+import exercise from "exercise";
 import * as messaging from "messaging";
 import { logInfo, logError } from "../common/log";
 import * as fs from "fs";
@@ -29,7 +30,7 @@ let persistLastReadings = function(data) {
   }
 }
 
-export let CryptoIndicator = function(document, settings) {
+export let CryptoIndicator = function(document, settings, isLongScreen) {
   let self = this;  
   let leftLogo = document.getElementById("crypto-left-logo");
   let rightLogo = document.getElementById("crypto-right-logo");
@@ -70,7 +71,8 @@ export let CryptoIndicator = function(document, settings) {
   }
     
   self.refreshUi = function() {  
-    if (!isEnabled) {      
+    let isFroceHiddenOnIonic = !isLongScreen && exercise && exercise.state == "started";
+    if (!isEnabled || isFroceHiddenOnIonic) {      
       toggle(false);
       return;
     }    

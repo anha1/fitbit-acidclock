@@ -3,6 +3,7 @@ import { MODE } from "../common/mode";
 function mySettings(props) {
   let screenWidth = props.settingsStorage.getItem("screenWidth");
   let screenHeight = props.settingsStorage.getItem("screenHeight");
+  let modelName = props.settingsStorage.getItem("modelName"); //"Ionic" "Versa "Versa Lite"
   
   let colorSet = [
     {color: "#FF00FF"},   
@@ -63,14 +64,31 @@ function mySettings(props) {
     {name:"Stellar Lumens (XLM)",  value: "xlm"}  
   ];  
   
-  let goalTypes = [
-    {name:"NONE",  value: "NONE"},
-    {name:"Steps",  value: "steps"},
-    {name:"Distance",  value: "distance"},
-    {name:"Elevation",  value: "elevationGain"},
-    {name:"Calories",  value: "calories"},
-    {name:"Active Minutes",  value: "activeMinutes"},   
-  ];
+  let goalTypes = [];
+  
+  goalTypes.push({name:"NONE", value: "NONE"});
+  goalTypes.push({name:"Steps", value: "steps"});
+  goalTypes.push({name:"Distance", value: "distance"});
+  if (modelName != "Versa Lite") {
+    goalTypes.push({name:"Elevation", value: "elevationGain"});
+  }
+  goalTypes.push({name:"Calories", value: "calories"});
+  goalTypes.push({name:"Active Minutes", value: "activeMinutes"});  
+   
+  let exerciseTypes = [
+    {value:"run", name:"Run"},
+    {value:"walk", name:"Walk"},
+    {value:"hiking", name:"Hiking"},
+    {value:"cycling", name:"Cycling"},
+    {value:"golf", name:"Golf"},   
+    {value:"workout", name:"Workout"},
+    {value:"weights", name:"Weights"},
+    {value:"treadmill", name:"Treadmill"},  
+    {value:"circuit-training", name:"Circuit"},
+    {value:"yoga", name: "Yoga"},
+    {value:"pilates", name: "Pilates"},
+    {value:"martial-arts", name: "Martial arts"}
+  ]
   
   return (
     <Page>
@@ -107,12 +125,12 @@ function mySettings(props) {
         {value:"SW MM.DD", name:"Mon 12.31"},
         {value:"SW DD SM", name:"Mon 31 Dec"},
         {value:"SW DD LM", name:"Mon 31 December"},
-           {value:"DD LM", name:"31 December"}
+        {value:"DD LM", name:"31 December"}
       ]}
       />
       
       <Select
-      label="Distance Unit"
+      label="Distance unit"
       settingsKey="distanceUnit"
       options={[
         {name:"meters", value:"m"},
@@ -122,6 +140,26 @@ function mySettings(props) {
         {name:"yards", value:"yd"}          
       ]}
       />
+      
+      <Select
+        label="Speed unit"
+        settingsKey="speedUnit"
+        options={[
+          {value:"s", name:"Distance unit / second"},
+          {value:"m", name:"Distance unit / minute"},
+          {value:"h", name:"Distance unit / hour"}           
+        ]}
+      />   
+      
+      <Select
+        label="Speed type"
+        settingsKey="speedType"
+        options={[
+          {value:"current", name: "Current"},
+          {value:"average", name: "Average"},
+          {value:"max", name: "Maximum"}           
+        ]}
+      />   
       
       <Toggle
          settingsKey="isShowSeconds"
@@ -157,6 +195,115 @@ function mySettings(props) {
          settingsKey="isShowRestingBpm"
          label="Show resting hearth rate"
       />
+      
+      <Section title="Exercises">   
+        <Toggle
+         settingsKey="isExercise"
+         label="Enable exercise mode"
+        />     
+        
+        <Toggle
+         settingsKey="isGps"
+         label="Use GPS when possible"
+        />   
+        
+        <Select
+        label="Exercise type 1"
+        settingsKey="exerciseType1"
+        options={exerciseTypes}
+        />  
+        
+        <Select
+        label="Exercise type 2"
+        settingsKey="exerciseType2"
+        options={exerciseTypes}
+        />     
+        
+        <Select
+        label="Exercise type 3"
+        settingsKey="exerciseType3"
+        options={exerciseTypes}
+        />     
+        
+        {(modelName != "Ionic") && <Select
+        label="Exercise type 4"
+        settingsKey="exerciseType4"
+        options={exerciseTypes}
+        />}     
+        
+      </Section>  
+      
+      <Section title="Goals">   
+        <Select
+          label="Goal 1"
+          settingsKey="goal0"
+          options={goalTypes}
+        />
+        <Select
+          label="Goal 2"
+          settingsKey="goal1"
+          options={goalTypes}
+        />
+        <Select
+          label="Goal 3"
+          settingsKey="goal2"
+          options={goalTypes}
+        />
+        <Select
+          label="Goal 4"
+          settingsKey="goal3"
+          options={goalTypes}
+        />
+        {(modelName != "Ionic") && <Select
+          label="Goal 5"
+          settingsKey="goal4"
+          options={goalTypes}
+        />}       
+      </Section>  
+      
+      <Section title="Cryptocurrencies">   
+        <Toggle
+         settingsKey="isShowCc"
+         label="Show Cryptocurrencies"
+        />   
+        <Toggle
+         settingsKey="isVibrationOnCcErRefresh"
+         label="Vibration on refresh"
+        />
+        <Select
+        label="Auto refresh interval (when the screen is on)"
+        settingsKey="autoRefreshIntervalCc"
+        options={[
+          {value:"1", name:"1 minute"},
+          {value:"3", name:"3 minutes"},
+          {value:"5", name:"5 minutes"},
+          {value:"10", name:"10 minutes"},
+          {value:"20", name:"20 minutes"},
+          {value:"30", name:"30 minutes"},
+          {value:"45", name:"45 minutes"}            
+        ]}
+        />
+        <Select
+          label="Left CC"
+          settingsKey="leftCc"
+          options={ccOptions}
+        />
+        <Select
+          label="Right CC"
+          settingsKey="rightCc"
+          options={ccOptions}
+        />
+        
+        <Text>Prices are shown in USD and are taken from Kraken exchange.</Text>
+        <Text>For a manual refresh, tap on a screen (not faster than once in 15 seconds).</Text>
+        <Text>Max age of the data displayed: 1 hour.</Text>       
+      </Section>      
+
+      <Section title="CC Logos color">
+        <ColorSelect
+          settingsKey="ccLogosColor"
+          colors={colorSet} />
+      </Section>
       
       <ImagePicker
         title="Background Image"
@@ -237,81 +384,7 @@ function mySettings(props) {
           settingsKey="otherLabelsColor"
           colors={colorSet} />
       </Section>
-            
-      <Section title="Goals">   
-        <Select
-          label="Goal 1"
-          settingsKey="goal0"
-          options={goalTypes}
-        />
-        <Select
-          label="Goal 2"
-          settingsKey="goal1"
-          options={goalTypes}
-        />
-        <Select
-          label="Goal 3"
-          settingsKey="goal2"
-          options={goalTypes}
-        />
-        <Select
-          label="Goal 4"
-          settingsKey="goal3"
-          options={goalTypes}
-        />
-        <Select
-          label="Goal 5"
-          settingsKey="goal4"
-          options={goalTypes}
-        />
-        
-      </Section>  
-      
-      <Section title="Cryptocurrencies">   
-        <Toggle
-         settingsKey="isShowCc"
-         label="Show Cryptocurrencies"
-        />   
-        <Toggle
-         settingsKey="isVibrationOnCcErRefresh"
-         label="Vibration on refresh"
-        />
-        <Select
-        label="Auto refresh interval (when the screen is on)"
-        settingsKey="autoRefreshIntervalCc"
-        options={[
-          {value:"1", name:"1 minute"},
-          {value:"3", name:"3 minutes"},
-          {value:"5", name:"5 minutes"},
-          {value:"10", name:"10 minutes"},
-          {value:"20", name:"20 minutes"},
-          {value:"30", name:"30 minutes"},
-          {value:"45", name:"45 minutes"}            
-        ]}
-        />
-        <Select
-          label="Left CC"
-          settingsKey="leftCc"
-          options={ccOptions}
-        />
-        <Select
-          label="Right CC"
-          settingsKey="rightCc"
-          options={ccOptions}
-        />
-
-        
-        <Text>Prices are shown in USD and are taken from Kraken exchange.</Text>
-        <Text>For a manual refresh, tap on a screen (not faster than once in 15 seconds).</Text>
-        <Text>Max age of the data displayed: 1 hour.</Text>       
-      </Section>      
-
-      <Section title="CC Logos color">
-        <ColorSelect
-          settingsKey="ccLogosColor"
-          colors={colorSet} />
-      </Section>
-
+                  
       <Section
         title="About">
         <Text>

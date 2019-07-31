@@ -1,77 +1,147 @@
 <svg id="root">
-  <rect id="background" />
-  <image id="backgroundImage" width="100%" height="100%"/>
-
-  <text id="time"/>
-  <text id="amPm"/>
-  <text id="date"/>
-     
-  <g id="bluetooth"> 
-    <image id="bluetooth-icon-enabled" class="icon" href="bluetooth_enabled_24px.png" />
-    <image id="bluetooth-icon-disabled" class="icon" href="bluetooth_disabled_24px.png" />
-  </g>  
-  <g id="restingHr"> 
-    <text id="hr-resting-count" class="count sideCount">88</text>
-  </g>  
-  <g id="hr"> 
-    <text id="hr-count" class="count sideCount">88</text>    
-    <image id="hr-icon-systole" class="icon" href="stat_hr_solid_24px.png" />
-    <image id="hr-icon-diastole" class="icon" href="stat_hr_solid_24px.png" />
-  </g>  
-  <g id="bat"> 
-    <image id="bat-icon" class="icon" href="battery_24px.png" />
-    <rect id="bat-fill"/>
-    <text id="bat-count" class="count sideCount">88</text>   
-  </g> 
-  <g id="goal0">
-    <rect class="bg"/>  
-    <circle class="tgt-no"/>  
-    <circle class="tgt-yes"/>  
-    <rect class="progress"/>  
-    <text class="count">8888</text>
-    <image  class="icon" href="stat_steps_solid_24px.png" />
-  </g>
-  <g id="goal1">
-    <rect class="bg"/>  
-    <circle class="tgt-no"/>  
-    <circle class="tgt-yes"/>  
-    <rect class="progress"/>    
-    <text class="count">8888</text>
-    <image class="icon" href="stat_dist_solid_24px.png" />
-  </g>
-  <g id="goal2">
-    <rect class="bg"/>  
-    <circle class="tgt-no"/>  
-    <circle class="tgt-yes"/>  
-    <rect class="progress"/>    
-    <text class="count">8888</text>
-    <image class="icon" href="stat_floors_solid_24px.png" />
-  </g>
-  <g id="goal3">
-    <rect class="bg"/>  
-    <circle class="tgt-no"/>  
-    <circle class="tgt-yes"/>  
-    <rect class="progress"/>    
-    <text class="count">8888</text>
-    <image class="icon" href="stat_cals_solid_24px.png" />
-  </g> 
-  <g id="goal4">
-    <rect class="bg"/>  
-    <circle class="tgt-no"/>  
-    <circle class="tgt-yes"/>  
-    <rect class="progress"/>    
-    <text class="count">8888</text>
-    <image class="icon" href="stat_am_solid_24px.png" />
-  </g>
+   <defs>
+      <link rel="stylesheet" href="styles.css" />
+      <link rel="import" href="/mnt/sysassets/widgets_common.gui" />
+      <!-- Additional Imports -->
+      <link rel="import" href="/mnt/sysassets/widgets/push_button_widget.gui" />
+      <link rel="import" href="/mnt/sysassets/widgets/combo_button_widget.gui" />
+      <link rel="import" href="/mnt/sysassets/widgets/square_button_widget.gui" />
+   </defs>
+    
+   <rect id="background" />
+   <image id="backgroundImage" width="100%" height="100%" />
+   <text id="time" />
+   <text id="amPm" />
+   <text id="date" />
+   <g id="bluetooth">
+      <image id="bluetooth-icon-enabled" class="icon" href="bluetooth_enabled_24px.png" />
+      <image id="bluetooth-icon-disabled" class="icon" href="bluetooth_disabled_24px.png" />
+   </g>
+   <g id="restingHr">
+      <text id="hr-resting-count" class="count sideCount">88</text>
+   </g>
+   <g id="hr">
+      <text id="hr-count" class="count sideCount">88</text>
+      <image id="hr-icon-systole" class="icon" href="stat_hr_solid_24px.png" />
+      <image id="hr-icon-diastole" class="icon" href="stat_hr_solid_24px.png" />
+   </g>
+   <g id="bat">
+      <image id="bat-icon" class="icon" href="battery_24px.png" />
+      <rect id="bat-fill" />
+      <text id="bat-count" class="count sideCount">88</text>
+   </g>
+   <g id="view-regular">
+      <g id="goal0">
+         <rect class="bg" />
+         <circle class="tgt-no" />
+         <circle class="tgt-yes" />
+         <rect class="progress" />
+         <text class="count">8888</text>
+         <image class="icon" href="stat_steps_solid_24px.png" />
+      </g>
+      <g id="goal1">
+         <rect class="bg" />
+         <circle class="tgt-no" />
+         <circle class="tgt-yes" />
+         <rect class="progress" />
+         <text class="count">8888</text>
+         <image class="icon" href="stat_dist_solid_24px.png" />
+      </g>
+      <g id="goal2">
+         <rect class="bg" />
+         <circle class="tgt-no" />
+         <circle class="tgt-yes" />
+         <rect class="progress" />
+         <text class="count">8888</text>
+         <image class="icon" href="stat_floors_solid_24px.png" />
+      </g>
+      <g id="goal3">
+         <rect class="bg" />
+         <circle class="tgt-no" />
+         <circle class="tgt-yes" />
+         <rect class="progress" />
+         <text class="count">8888</text>
+         <image class="icon" href="stat_cals_solid_24px.png" />
+      </g>
+      <g id="goal4">
+         <rect class="bg" />
+         <circle class="tgt-no" />
+         <circle class="tgt-yes" />
+         <rect class="progress" />
+         <text class="count">8888</text>
+         <image class="icon" href="stat_am_solid_24px.png" />
+      </g>
+   </g>
+   <rect id="crypto-container">
+      <g id="crypto-left">
+         <text class="count" id="crypto-left-er">?</text>
+         <image class="icon" id="crypto-left-logo" href="crypto/btc.png" />
+      </g>
+      <g id="crypto-right">
+         <text class="count" id="crypto-right-er">?</text>
+         <image class="icon" id="crypto-right-logo" href="crypto/eth.png" />
+      </g>
+   </rect>
   
-  <rect id="crypto-container"> 
-    <g id="crypto-left">      
-      <text class="count" id="crypto-left-er">?</text>
-      <image class="icon" id="crypto-left-logo" href="crypto/btc.png" />
-    </g> 
-    <g id="crypto-right">      
-      <text class="count" id="crypto-right-er">?</text>
-      <image class="icon" id="crypto-right-logo" href="crypto/eth.png" />
-    </g> 
-  </rect>
+   <use id="btn-start-exercise" href="#combo-button-upper-left">
+      <set href="combo-button-icon" attributeName="href" to="workout/play.png" />
+      <set href="combo-button-icon-press" attributeName="href" to="workout/play.png" />
+   </use>
+  
+   <use id="btn-pause-exercise" href="#combo-button-upper-left">
+      <set href="combo-button-icon" attributeName="href" to="workout/pause.png" />
+      <set href="combo-button-icon-press" attributeName="href" to="workout/pause.png" />
+   </use>
+  
+   <use id="btn-finish-exercise" href="#combo-button-upper-right">
+      <set href="combo-button-icon" attributeName="href" to="workout/finish.png" />
+      <set href="combo-button-icon-press" attributeName="href" to="workout/finish.png" />
+   </use>
+  
+   <g id="view-exercise-type">
+      <rect id="exercise-type-background" />
+      <use id="btn-back-exercise" href="#combo-button-upper-left" fill="palegoldenrod">
+         <set href="combo-button-icon" attributeName="href" to="workout/back.png" />
+         <set href="combo-button-icon-press" attributeName="href" to="workout/back.png" />
+      </use>
+      <svg id="exercise-type-1-container">
+         <use href="#square-button" id="exercise-type-1">
+            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />
+         </use>
+      </svg>
+      <svg id="exercise-type-2-container">
+         <use href="#square-button" id="exercise-type-2">
+            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />
+         </use>
+      </svg>
+      <svg id="exercise-type-3-container">
+         <use href="#square-button" id="exercise-type-3">
+            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />
+         </use>
+      </svg>
+      <svg id="exercise-type-4-container">
+         <use href="#square-button" id="exercise-type-4">
+            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />
+         </use>
+      </svg>
+   </g>
+   <g id="view-exercise">
+      <g id="exercise-metric-time">
+         <text class="count" id="exercise-metric-time-count">88:88:88</text>
+         <image class="icon" href="stat_am_solid_24px.png" />
+      </g>
+      <g id="exercise-metric-cals">
+         <text class="count" id="exercise-metric-cals-count">88888</text>
+         <image class="icon" href="stat_cals_solid_24px.png" />
+      </g>
+      <g id="exercise-metric-dist">
+         <text class="count" id="exercise-metric-dist-count">88 km</text>
+         <image class="icon" href="stat_dist_solid_24px.png" />
+      </g>
+      <g id="exercise-metric-speed">
+         <text class="count" id="exercise-metric-speed-count">88 km/h</text>
+         <image class="icon" href="workout/speed.png" />
+      </g>
+              
+   </g>
 </svg>

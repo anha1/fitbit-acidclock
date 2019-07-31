@@ -12,8 +12,22 @@ const MILLISECONDS_PER_MINUTE = 1000 * 60;
 
 let cryptoCompanion = new CryptoCompanion();
 
+settingsStorage.setItem("modelName", device.modelName); //"Ionic" "Versa" "Versa Lite"
 settingsStorage.setItem("screenWidth", device.screen.width);
 settingsStorage.setItem("screenHeight", device.screen.height);
+
+function setDefaultTrue(key) {
+  let extantValue = settingsStorage.getItem(key);
+  if (extantValue === null) {
+    settingsStorage.setItem(key, "true");
+  }
+}
+
+setDefaultTrue("isExercise");
+setDefaultTrue("isGps");
+setDefaultTrue("isBluetoothIndicator");
+setDefaultTrue("isAmPm");
+setDefaultTrue("isShowStepsProgress");
 
 var compressAndTransferImage = function(settingsValue) {
   const imageData = JSON.parse(settingsValue);

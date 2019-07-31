@@ -1,6 +1,7 @@
 import { goals } from "user-activity";
 import { today } from "user-activity";
 import { MODE } from "../common/mode";
+import * as appUtils from "./app-utils";
 
 const GOALS_COUNT = 5;
 
@@ -57,24 +58,6 @@ export let ProgressIndicators = function(document, settings, stepsProgress) {
   
   let progressWidth = progressEls[0].container.getElementsByClassName("bg")[0].getBBox().width;
   
-  let getDistanceDisplayValue = function(actual) {
-      var displayValue = actual;
-      let distanceUnit = settings.getOrElse("distanceUnit", "m");
-      if (distanceUnit === "km") {
-        displayValue = (actual / 1000.).toPrecision(3);
-      } else if (distanceUnit === "ft") {
-        displayValue = Math.round(actual * 3.2808);      
-      } else if (distanceUnit === "mi") {
-        displayValue = (actual / 1609.344).toPrecision(3);      
-      } else if (distanceUnit === "yd") {
-        displayValue = Math.round(actual * 1.0936);      
-      }
-      if (settings.isTrue("isShowDistanceUnit")) {
-        displayValue = displayValue + " " + distanceUnit;
-      }
-      return displayValue;
-  }
-
   let getStepsDisplayValue = function(actual) { 
     if (settings.isTrue("isShowStepsProgress")) {   
       let stepsProgressValue = stepsProgress.getStepsProgress(actual);    
@@ -120,7 +103,7 @@ export let ProgressIndicators = function(document, settings, stepsProgress) {
 
     var displayValue = actual;
     if (goalType === "distance" && actual) {    
-      displayValue = getDistanceDisplayValue(actual);
+      displayValue = appUtils.getDistanceDisplayValue(settings, actual);
     } else if (goalType === "steps" && actual) {    
       displayValue = getStepsDisplayValue(actual);
     }

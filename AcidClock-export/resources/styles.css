@@ -65,6 +65,103 @@
   transform: translate(100%-78,163);
 }
 
+#view-exercise-type {
+  display: none;
+}
+
+#view-exercise {
+  display: none;
+}
+
+#btn-finish-exercise {
+}
+
+#btn-pause-exercise {
+  display: none;
+}
+
+#exercise-metric-time {
+  transform: translate(5,83);  
+  fill: orange;
+}
+
+#exercise-metric-cals {
+  transform: translate(5,123);
+  fill: violet;
+}
+
+#exercise-metric-dist {
+  transform: translate(5,163);
+  fill: yellowgreen;
+}
+
+#exercise-metric-speed {
+  transform: translate(5,203);
+  fill: yellowgreen;
+}
+
+
+#exercise-metric-time-count {
+  text-length: 159;
+}
+
+#exercise-metric-cals-count {
+  text-length: 159;
+}
+
+#exercise-metric-dist-count {
+  text-length: 159;
+}
+
+#exercise-type-background{
+  x: 0;
+  y: 0;
+  width: 100%;
+  height: 100%;
+  fill: black;
+}
+
+#exercise-type-1-container {
+  y: 0; 
+  width: 80%;
+  x: 20%;
+}
+
+#exercise-type-2-container {
+  y: 75;
+  width: 80%;
+  x: 20%;
+}
+
+#exercise-type-3-container {
+  y: 150;  
+  width: 80%;
+  x: 20%;
+}
+
+#exercise-type-4-container {
+  y: 225;  
+  width: 80%;
+  x: 20%;
+}
+
+#btn-pause-exercise {
+  fill: palegoldenrod;
+  display: none;
+}
+
+#btn-start-exercise {
+  fill: palegoldenrod;
+  display: none;
+}
+
+#btn-finish-exercise {
+  fill: palegoldenrod;
+  display: none;
+}
+
+
+
 #goal0 {
   transform: translate(5,83);  
   fill: gold;
