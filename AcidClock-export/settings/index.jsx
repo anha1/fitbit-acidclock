@@ -86,7 +86,13 @@ function mySettings(props) {
     {value:"treadmill", name:"Treadmill"},  
     {value:"circuit-training", name:"Circuit"},
     {value:"yoga", name: "Yoga"},
-    {value:"pilates", name: "Pilates"},
+    {value:"pilates", name: "Pilates"},   
+    {value:"elliptical", name: "Elliptical"},
+    {value:"spinning", name: "Spinning"},
+    {value:"stair-climber", name: "Stair climber"},
+    {value:"bootcamp", name: "Bootcamp"},
+    {value:"kickboxing", name: "Kickboxing"},
+    {value:"tennis", name: "Tennis"},    
     {value:"martial-arts", name: "Martial arts"}
   ]
   
@@ -142,12 +148,13 @@ function mySettings(props) {
       />
       
       <Select
-        label="Speed unit"
+        label="Speed/Pace unit"
         settingsKey="speedUnit"
         options={[
-          {value:"s", name:"Distance unit / second"},
-          {value:"m", name:"Distance unit / minute"},
-          {value:"h", name:"Distance unit / hour"}           
+          {value:"s", name:"Speed: Distance unit / second"},
+          {value:"m", name:"Speed: Distance unit / minute"},
+          {value:"h", name:"Speed: Distance unit / hour"},
+          {value:"pace", name:"Pace: time / Distance unit"},
         ]}
       />   
       
@@ -193,7 +200,7 @@ function mySettings(props) {
       
       <Toggle
          settingsKey="isShowRestingBpm"
-         label="Show resting hearth rate"
+         label="Show resting heart rate"
       />
       
       <Section title="Exercises">   
@@ -294,7 +301,48 @@ function mySettings(props) {
           options={ccOptions}
         />
         
-        <Text>Prices are shown in USD and are taken from Kraken exchange.</Text>
+        <Select
+        label="Show price in currency"
+        settingsKey="referenceCurrencyCc"
+        options={[
+          {value:"USD", name:"USD"},
+          {value:"EUR", name:"EUR"},
+          {value:"CAD", name:"CAD"},
+          {value:"AUD", name:"AUD"},
+          {value:"JPY", name:"JPY"},
+          {value:"HKD", name:"HKD"},
+          {value:"ISK", name:"ISK"},
+          {value:"PHP", name:"PHP"},
+          {value:"DKK", name:"DKK"},
+          {value:"HUF", name:"HUF"},
+          {value:"CZK", name:"CZK"},
+          {value:"RON", name:"RON"},
+          {value:"SEK", name:"SEK"},
+          {value:"IDR", name:"IDR"},
+          {value:"INR", name:"INR"},
+          {value:"BRL", name:"BRL"},
+          {value:"RUB", name:"RUB"},
+          {value:"HRK", name:"HRK"},
+          {value:"THB", name:"THB"},
+          {value:"CHF", name:"CHF"},
+          {value:"SGD", name:"SGD"},
+          {value:"PLN", name:"PLN"},
+          {value:"BGN", name:"BGN"},
+          {value:"TRY", name:"TRY"},
+          {value:"CNY", name:"CNY"},
+          {value:"NOK", name:"NOK"},
+          {value:"NZD", name:"NZD"},
+          {value:"ZAR", name:"ZAR"},
+          {value:"MXN", name:"MXN"},
+          {value:"ILS", name:"ILS"},
+          {value:"GBP", name:"GBP"},
+          {value:"KRW", name:"KRW"},
+          {value:"MYR", name:"MYR"} 
+        ]}
+        />
+        
+        <Text>Prices are taken from Kraken exchange.</Text>
+        <Text>Non-USD prices are derived from USD prices using exchangeratesapi.io.</Text>
         <Text>For a manual refresh, tap on a screen (not faster than once in 15 seconds).</Text>
         <Text>Max age of the data displayed: 1 hour.</Text>       
       </Section>      

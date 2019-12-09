@@ -52,7 +52,8 @@ let settings = new Settings(SETTINGS_FILE, function() {
     goal1: "distance",
     goal2: "elevationGain",
     goal3: "calories",
-    goal4: "activeMinutes"
+    goal4: "activeMinutes",
+    currencyCc: "USD"
   };
   if (units.distance === "us") {
     defaults.distanceUnit = "mi";

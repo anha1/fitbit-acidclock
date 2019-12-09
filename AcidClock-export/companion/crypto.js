@@ -40,7 +40,8 @@ let returnCcer = function(ccer) {
   }
 }
 
-let queryCcer = function(leftCc, rightCc, callback) {
+let queryCcer = function(leftCc, rightCc, ratio) {
+    
   let url = "https://api.kraken.com/0/public/Ticker?pair=" + ccToQuery(leftCc) + "," + ccToQuery(rightCc);
   logInfo(url);
   fetch(url)
@@ -48,8 +49,8 @@ let queryCcer = function(leftCc, rightCc, callback) {
       response.json()
       .then(function(data) {
         var ccer = {
-          leftCcer: data["result"][ccToKey(leftCc)]["c"][0],
-          rightCcer: data["result"][ccToKey(rightCc)]["c"][0],
+          leftCcer: ratio * data["result"][ccToKey(leftCc)]["c"][0],
+          rightCcer:  ratio * data["result"][ccToKey(rightCc)]["c"][0],
           leftCc: leftCc,
           rightCc: rightCc,
           type: "CCER"
@@ -72,7 +73,20 @@ export let CryptoCompanion = function() {
   self.push = function() {
     let leftCc = getOrElse("leftCc", "btc");
     let rightCc = getOrElse("rightCc", "eth");  
-    queryCcer(leftCc, rightCc);   
+    let referenceCurrencyCc = getOrElse("referenceCurrencyCc", "USD");
+    if ("USD" == referenceCurrencyCc) {
+      queryCcer(leftCc, rightCc, 1);   
+    } else {
+      let url = "https://api.exchangeratesapi.io/latest?base=USD";
+       fetch(url)
+       .then(function (response) {
+          response.json()
+          .then(function(data) {
+            var ratio = data["rates"][referenceCurrencyCc];
+            queryCcer(leftCc, rightCc, ratio); 
+          })
+       })                
+    }
   }
   
   self.tryPushIfAllowed = function() {
@@ -101,7 +115,7 @@ export let CryptoCompanion = function() {
     if (!key) {
       return;
     }
-    if ("leftCc" === key || "rightCc" === key) {
+    if ("leftCc" === key || "rightCc" === key || "referenceCurrencyCc" === key) {
       logInfo("CC: currency changed"); 
       self.tryPushIfAllowed();
     }    

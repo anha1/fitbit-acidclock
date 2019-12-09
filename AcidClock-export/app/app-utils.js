@@ -42,8 +42,12 @@ export function getSpeedDisplayValue(settings, actual) {
     } 
   
     let speedUnit = settings.getOrElse("speedUnit", defaultSpeedUnit);
-      
-    if (speedUnit == "h") {
+  
+    if (speedUnit == "pace") {      
+      let paceMs = 1000.0 / displayValue; // ms / unit
+      let paceFormatted = getDurationDisplayValue(paceMs)      
+      displayValue = paceFormatted + "/" + distanceUnit;      
+    } else if (speedUnit == "h") {
       displayValue = (3600.0 * displayValue).toFixed(2) + " " + distanceUnit +"/h";
     } else if (speedUnit == "m") {
       displayValue = (60.0 * displayValue).toFixed(2) + " " + distanceUnit +"/m";
