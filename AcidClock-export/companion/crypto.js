@@ -7,26 +7,21 @@ import { me as companion} from "companion"
 
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 
-let ccKrakenMapping = {
-  "btc": {key: "XXBTZUSD", query: "XBTUSD"},
-  "eth": {key: "XETHZUSD", query: "ETHUSD"},
-  "ltc": {key: "XLTCZUSD", query: "LTCUSD"},
-  "xrp": {key: "XXRPZUSD", query: "XRPUSD"},
-  "xlm": {key: "XXLMZUSD", query: "XLMUSD"}
-}
-
-let ccToQuery = function(cc) {
-  return ccKrakenMapping[cc].query;
-}
-
-let ccToKey = function(cc) {
-  return ccKrakenMapping[cc].key;
-}
-
-let getOrElse = function(key, defaultValue) {
+let getListItemOrElse = function(key, defaultValue) {
   let string = settingsStorage.getItem(key); 
   if (string) {
     return JSON.parse(string)["values"][0].value;
+  }
+  return defaultValue;
+}
+
+let getOrElse = function(key, defaultValue) {
+  let structure = settingsStorage.getItem(key); 
+  if (structure) {    
+    let value = JSON.parse(structure)['name'];
+    if (value) {
+      return value;
+    }
   }
   return defaultValue;
 }
@@ -40,25 +35,36 @@ let returnCcer = function(ccer) {
   }
 }
 
+let jsonPriceToVal = function(response, ratio) {
+  if (response['price']) {
+    let price = parseFloat(response['price']);
+    if (ratio != 1 && response['symbol'] && response['symbol'].indexOf("USD") > 1) { // convert BTCUSDT but not BTCEUR or USDTBTC  
+      return price * ratio;
+    } 
+    return price;
+  } else {
+    return 0;
+  }
+}
+
 let queryCcer = function(leftCc, rightCc, ratio) {
-    
-  let url = "https://api.kraken.com/0/public/Ticker?pair=" + ccToQuery(leftCc) + "," + ccToQuery(rightCc);
-  logInfo(url);
-  fetch(url)
-  .then(function (response) {
-      response.json()
-      .then(function(data) {
-        var ccer = {
-          leftCcer: ratio * data["result"][ccToKey(leftCc)]["c"][0],
-          rightCcer:  ratio * data["result"][ccToKey(rightCc)]["c"][0],
-          leftCc: leftCc,
-          rightCc: rightCc,
-          type: "CCER"
-        }
-        returnCcer(ccer);
-      });
-  })
-  .catch(function (err) {
+  let url = "https://api.binance.com/api/v1/ticker/price?symbol=";
+  Promise.all([fetch(url + leftCc),  fetch(url + rightCc)])
+  .then(function(responses) {
+       Promise.all([responses[0].json(), responses[1].json()])
+       .then(function(jsonPrices) {
+          let leftVal = jsonPriceToVal(jsonPrices[0], ratio);
+          let rightVal = jsonPriceToVal(jsonPrices[1], ratio);
+          var ccer = {
+            leftCcer: leftVal,
+            rightCcer: rightVal,
+            leftCc: leftCc,
+            rightCc: rightCc,
+            type: "CCER"
+          }
+          returnCcer(ccer);         
+       })
+  }).catch(function (err) {
     logInfo("Error fetching CCER: " + err);
   });
 }
@@ -71,9 +77,9 @@ export let CryptoCompanion = function() {
   }
   
   self.push = function() {
-    let leftCc = getOrElse("leftCc", "btc");
-    let rightCc = getOrElse("rightCc", "eth");  
-    let referenceCurrencyCc = getOrElse("referenceCurrencyCc", "USD");
+    let leftCc = getOrElse("leftCcTicker", "BTCUSDT");
+    let rightCc = getOrElse("rightCcTicker", "ETHUSDT");  
+    let referenceCurrencyCc = getListItemOrElse("referenceCurrencyCc", "USD");
     if ("USD" == referenceCurrencyCc) {
       queryCcer(leftCc, rightCc, 1);   
     } else {
@@ -82,7 +88,7 @@ export let CryptoCompanion = function() {
        .then(function (response) {
           response.json()
           .then(function(data) {
-            var ratio = data["rates"][referenceCurrencyCc];
+            var ratio = data["rates"][referenceCurrencyCc];    
             queryCcer(leftCc, rightCc, ratio); 
           })
        })                

@@ -1,4 +1,7 @@
 {
+  "devDependencies": {
+    "@fitbit/sdk": "~4.2.0"
+  },
   "fitbit": {
     "appUUID": "7a16871b-5016-4adb-9f33-bfd793e50d4c",
     "appType": "clockface",
@@ -21,13 +24,10 @@
       "mira"
     ],
     "i18n": {
-      "en": {
+      "en-US": {
         "name": "AcidClock"
       }
     },
     "defaultLanguage": "en-US"
-  },
-  "devDependencies": {
-    "@fitbit/sdk": "~4.0.0"
   }
 }

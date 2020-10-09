@@ -236,6 +236,10 @@ messaging.peerSocket.addEventListener("message", function(evt) {
       isBackgroundImageMode = false;
     }
     
+    if (isCryptoMode()) {
+       cryptoIndicator.fetch(true);
+    }
+    
     settings.replaceSettings(newSettingsSource);
     applySettings();
     timeIndicator.drawTime(new Date());

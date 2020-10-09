@@ -45,6 +45,9 @@ export let CryptoIndicator = function(document, settings, isLongScreen) {
   var fetchIfStaleLimitMs = 5000;
   
   let formatCcer = function (value) {
+    if (!value) {
+      return "";
+    }
     var float = parseFloat(value);
     var disp = float.toFixed(1);
     if (float < 1) {
@@ -62,8 +65,17 @@ export let CryptoIndicator = function(document, settings, isLongScreen) {
     return disp;   
   }   
   
-  let getLogo = function(cc) {
-    return "crypto/" + cc + ".png";
+  let getLogo = function(cc, text) {
+    if (!cc || !text) {
+      return "";
+    }
+    if (cc.indexOf("BTC") == 0) {
+      return "crypto/btc.png";
+    } else if (cc.indexOf("ETH") == 0) {    
+      return "crypto/eth.png";
+    } else {    
+      return "crypto/coin.png";
+    }
   }
   
   let toggle = function(isShow) {
@@ -96,8 +108,8 @@ export let CryptoIndicator = function(document, settings, isLongScreen) {
   let drawData = function(data) {
     leftEl.text = formatCcer(data.leftCcer);
     rightEl.text = formatCcer(data.rightCcer);
-    leftLogo.href = getLogo(data.leftCc);
-    rightLogo.href = getLogo(data.rightCc);
+    leftLogo.href = getLogo(data.leftCc, leftEl.text);
+    rightLogo.href = getLogo(data.rightCc, rightEl.text);
     self.refreshUi();
   }
   

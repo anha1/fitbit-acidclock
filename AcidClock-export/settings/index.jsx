@@ -55,14 +55,6 @@ function mySettings(props) {
     {color: '#494949'}, 
     {color: '#2d2d2d'}
   ];
-
-  let ccOptions = [
-    {name:"Bitcoin (BTC)",  value: "btc"},
-    {name:"Ethereum (ETH)", value: "eth"},
-    {name:"Litecoin (LTC)", value: "ltc"},
-    {name:"Ripple (XRP)",   value: "xrp"},   
-    {name:"Stellar Lumens (XLM)",  value: "xlm"}  
-  ];  
   
   let goalTypes = [];
   
@@ -290,19 +282,21 @@ function mySettings(props) {
           {value:"45", name:"45 minutes"}            
         ]}
         />
-        <Select
-          label="Left CC"
-          settingsKey="leftCc"
-          options={ccOptions}
+
+        <TextInput
+          label="Left CC Binance ticker (like BTCUSDT)"
+          settingsKey="leftCcTicker"
+          placeholder="BTCUSDT"
         />
-        <Select
-          label="Right CC"
-          settingsKey="rightCc"
-          options={ccOptions}
+        
+        <TextInput
+          label="Right CC Binance ticker (like ETHUSDT)"
+          settingsKey="rightCcTicker"
+          placeholder="ETHUSDT"
         />
         
         <Select
-        label="Show price in currency"
+        label="Convert USD CC prices into"
         settingsKey="referenceCurrencyCc"
         options={[
           {value:"USD", name:"USD"},
@@ -341,7 +335,7 @@ function mySettings(props) {
         ]}
         />
         
-        <Text>Prices are taken from Kraken exchange.</Text>
+        <Text>Prices are taken from Binance exchange.</Text>
         <Text>Non-USD prices are derived from USD prices using exchangeratesapi.io.</Text>
         <Text>For a manual refresh, tap on a screen (not faster than once in 15 seconds).</Text>
         <Text>Max age of the data displayed: 1 hour.</Text>       
