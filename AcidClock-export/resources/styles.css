@@ -3,6 +3,48 @@
   fill: palegoldenrod;
 }
 
+.application-fill           { fill: fb-orange; }
+.foreground-fill            { fill: fb-white; }
+.background-fill            { fill: fb-black; }
+
+#btn-start-exercise #image {
+  href: "workout/play.png";
+  x: 10;
+}
+
+#btn-pause-exercise #image {
+  href: "workout/pause.png";
+  x: 9;
+}
+
+#btn-finish-exercise #image {
+  href: "workout/finish.png";
+}
+
+#btn-back-exercise #image {
+  href: "workout/back.png";
+}
+
+#btn-start-exercise {
+  x: 25;
+  y: 25;
+}
+
+#btn-pause-exercise {
+  x: 25;
+  y: 25;
+}
+
+#btn-finish-exercise {
+  x: 280;
+  y: 25;
+}
+
+#btn-back-exercise {
+  x: 25;
+  y: 25;
+}
+
 #background {
   x: 0;
   y: 0;
@@ -14,27 +56,27 @@
 #time {
   font-size: 48;
   font-family: System-Bold;
-  text-length: 32;
+  text-length: 38;
   text-anchor: middle;
   x: 50%;
-  y: 40;
+  y: 50;
   fill: white;
 }
 
 #amPm {
-  font-size: 33;
+  font-size: 30;
   font-family: System-Bold;
   text-length: 32;
   text-anchor: end;
-  x: 99%;
-  y: 29;
+  x: 90%;
+  y: 44;
   fill: white;
 }
 
 #date {
   x: 50%;
-  y: 69;
-  font-size: 33;
+  y: 81;
+  font-size: 32;
   text-anchor: middle;
   font-family: System-Bold;
   text-length: 120;
@@ -81,22 +123,22 @@
 }
 
 #exercise-metric-time {
-  transform: translate(5,83);  
+  transform: translate(8,93);
   fill: orange;
 }
 
 #exercise-metric-cals {
-  transform: translate(5,123);
+  transform: translate(5,133);
   fill: violet;
 }
 
 #exercise-metric-dist {
-  transform: translate(5,163);
+  transform: translate(5,173);
   fill: yellowgreen;
 }
 
 #exercise-metric-speed {
-  transform: translate(5,203);
+  transform: translate(8,213);
   fill: yellowgreen;
 }
 
@@ -121,26 +163,26 @@
   fill: black;
 }
 
-#exercise-type-1-container {
+#exercise-type-1 {
   y: 0; 
   width: 80%;
   x: 20%;
 }
 
-#exercise-type-2-container {
-  y: 75;
+#exercise-type-2 {
+  y: 120;
   width: 80%;
   x: 20%;
 }
 
-#exercise-type-3-container {
-  y: 150;  
+#exercise-type-3 {
+  y: 240;  
   width: 80%;
   x: 20%;
 }
 
-#exercise-type-4-container {
-  y: 225;  
+#exercise-type-4 {
+  y: 10000;  
   width: 80%;
   x: 20%;
 }
@@ -160,36 +202,34 @@
   display: none;
 }
 
-
-
 #goal0 {
-  transform: translate(5,83);  
+  transform: translate(8,93);  
   fill: gold;
 }
 
 #goal1 {
-  transform: translate(5,123);
+  transform: translate(5,133);
   fill: yellowgreen;
 }
 #goal2  {
-  transform: translate(5,163);
+  transform: translate(5,173);
   fill: skyblue;
 }
 #goal3  {
-  transform: translate(5,203);
+  transform: translate(8,213);
   fill: violet;
 }
 #goal4 {
-  transform: translate(5,243);
+  transform: translate(15,253);
   fill: orange;
 }
 
 #crypto-left {
-  transform: translate(5,100%-47)
+  transform: translate(15,260)
 }
 
 #crypto-right {
-  transform: translate(50%,100%-47)
+  transform: translate(50%+5,260)
 }
 
 #crypto-container {

@@ -65,7 +65,7 @@ function mySettings(props) {
     goalTypes.push({name:"Elevation", value: "elevationGain"});
   }
   goalTypes.push({name:"Calories", value: "calories"});
-  goalTypes.push({name:"Active Minutes", value: "activeMinutes"});  
+  goalTypes.push({name:"Active Zone Minutes", value: "activeMinutes"});  
    
   let exerciseTypes = [
     {value:"run", name:"Run"},
@@ -223,13 +223,7 @@ function mySettings(props) {
         settingsKey="exerciseType3"
         options={exerciseTypes}
         />     
-        
-        {(modelName != "Ionic") && <Select
-        label="Exercise type 4"
-        settingsKey="exerciseType4"
-        options={exerciseTypes}
-        />}     
-        
+                
       </Section>  
       
       <Section title="Goals">   
@@ -407,7 +401,7 @@ function mySettings(props) {
       </Section>
       
       <Section
-        title="Active Minutes color">
+        title="Active Zone Minutes color">
         <ColorSelect
           settingsKey="activeMinutesColor"
           colors={colorSet} />

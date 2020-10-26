@@ -30,8 +30,8 @@ let root = document.getElementById('root');
 
 const screenHeight = root.height //250 - Ionic, 300 - Versa
 const screenWidth = root.width
-let isLongScreen = screenHeight >= 300; //Versa and possible future devices
-let isElevation = !! Barometer; //Versa lite does not have it
+let isLongScreen = true;
+let isElevation = true;
 
 const SETTINGS_FILE = isElevation ? "settingsV1.cbor" : "settingsV1lite.cbor";
 

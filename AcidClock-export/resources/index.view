@@ -1,11 +1,10 @@
 <svg id="root">
    <defs>
       <link rel="stylesheet" href="styles.css" />
-      <link rel="import" href="/mnt/sysassets/widgets_common.gui" />
-      <!-- Additional Imports -->
-      <link rel="import" href="/mnt/sysassets/widgets/push_button_widget.gui" />
-      <link rel="import" href="/mnt/sysassets/widgets/combo_button_widget.gui" />
-      <link rel="import" href="/mnt/sysassets/widgets/square_button_widget.gui" />
+      <link rel="import" href="/mnt/sysassets/system_widget.defs" />
+      <link rel="import" href="/mnt/sysassets/widgets/text_button.defs" />
+      <link rel="import" href="/mnt/sysassets/widgets/icon_button.defs" />
+     
    </defs>
     
    <rect id="background" />
@@ -83,52 +82,34 @@
       </g>
    </rect>
   
-   <use id="btn-start-exercise" href="#combo-button-upper-left">
-      <set href="combo-button-icon" attributeName="href" to="workout/play.png" />
-      <set href="combo-button-icon-press" attributeName="href" to="workout/play.png" />
-   </use>
+   <use id="btn-start-exercise" href="#icon-button" class="small-button application-fill plus-button"/>
+       
+   <use id="btn-pause-exercise" href="#icon-button" class="small-button application-fill plus-button"/>
   
-   <use id="btn-pause-exercise" href="#combo-button-upper-left">
-      <set href="combo-button-icon" attributeName="href" to="workout/pause.png" />
-      <set href="combo-button-icon-press" attributeName="href" to="workout/pause.png" />
-   </use>
-  
-   <use id="btn-finish-exercise" href="#combo-button-upper-right">
-      <set href="combo-button-icon" attributeName="href" to="workout/finish.png" />
-      <set href="combo-button-icon-press" attributeName="href" to="workout/finish.png" />
-   </use>
+   <use id="btn-finish-exercise" href="#icon-button" class="small-button application-fill plus-button"/>
+
   
    <g id="view-exercise-type">
       <rect id="exercise-type-background" />
-      <use id="btn-back-exercise" href="#combo-button-upper-left" fill="palegoldenrod">
-         <set href="combo-button-icon" attributeName="href" to="workout/back.png" />
-         <set href="combo-button-icon-press" attributeName="href" to="workout/back.png" />
+      <use id="btn-back-exercise" href="#icon-button" class="small-button application-fill plus-button"/>
+     
+      <use id="exercise-type-1" href="#text-button" class="text-button primary application-fill">         
+            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />         
       </use>
-      <svg id="exercise-type-1-container">
-         <use href="#square-button" id="exercise-type-1">
-            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />
-         </use>
-      </svg>
-      <svg id="exercise-type-2-container">
-         <use href="#square-button" id="exercise-type-2">
-            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />
-         </use>
-      </svg>
-      <svg id="exercise-type-3-container">
-         <use href="#square-button" id="exercise-type-3">
-            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />
-         </use>
-      </svg>
-      <svg id="exercise-type-4-container">
-         <use href="#square-button" id="exercise-type-4">
-            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />
-         </use>
-      </svg>
+      <use id="exercise-type-2" href="#text-button" class="text-button primary application-fill">         
+            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />         
+      </use>
+      <use id="exercise-type-3" href="#text-button" class="text-button primary application-fill">         
+            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />         
+      </use>
+      <use id="exercise-type-4" href="#text-button" class="text-button primary application-fill">         
+            <set href="#text" attributeName="text-buffer" to="XXXXXXXXXXXXXXX" />         
+      </use>
    </g>
    <g id="view-exercise">
       <g id="exercise-metric-time">
          <text class="count" id="exercise-metric-time-count">88:88:88</text>
-         <image class="icon" href="stat_am_solid_24px.png" />
+        
       </g>
       <g id="exercise-metric-cals">
          <text class="count" id="exercise-metric-cals-count">88888</text>

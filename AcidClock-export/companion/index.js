@@ -12,7 +12,7 @@ const MILLISECONDS_PER_MINUTE = 1000 * 60;
 
 let cryptoCompanion = new CryptoCompanion();
 
-settingsStorage.setItem("modelName", device.modelName); //"Ionic" "Versa" "Versa Lite"
+settingsStorage.setItem("modelName", device.modelName);
 settingsStorage.setItem("screenWidth", device.screen.width);
 settingsStorage.setItem("screenHeight", device.screen.height);
 
