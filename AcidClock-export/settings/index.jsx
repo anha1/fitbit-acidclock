@@ -65,7 +65,7 @@ function mySettings(props) {
     goalTypes.push({name:"Elevation", value: "elevationGain"});
   }
   goalTypes.push({name:"Calories", value: "calories"});
-  goalTypes.push({name:"Active Minutes", value: "activeMinutes"});  
+  goalTypes.push({name:"Active Zone Minutes", value: "activeMinutes"});  
    
   let exerciseTypes = [
     {value:"run", name:"Run"},

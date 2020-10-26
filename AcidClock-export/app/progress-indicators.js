@@ -70,13 +70,13 @@ export let ProgressIndicators = function(document, settings, stepsProgress) {
   let drawProgress = function(progressEl) {
     let goalType = self.goalTypes[progressEl.index];
 
-    let actual = today.local[goalType] || 0;
+    let actual = (goalType == "activeMinutes" ? today.local.activeZoneMinutes.total : today.local[goalType]) || 0;
     if (progressEl.prevProgressVal == actual) {
       return;
     }  
     progressEl.prevProgressVal = actual;
 
-    let goal = (goals[goalType] || 0);
+    let goal = (goalType == "activeMinutes" ? goals.activeZoneMinutes.total :  goals[goalType]) || 0;
 
     var progress = 0;
     if (goal > 0) {
@@ -106,6 +106,8 @@ export let ProgressIndicators = function(document, settings, stepsProgress) {
       displayValue = appUtils.getDistanceDisplayValue(settings, actual);
     } else if (goalType === "steps" && actual) {    
       displayValue = getStepsDisplayValue(actual);
+    } else if (goalType == "activeMinutes") {
+      displayValue = today.local.activeZoneMinutes.fatBurn + "/" + today.local.activeZoneMinutes.cardio + "/" + today.local.activeZoneMinutes.peak;
     }
     progressEl.count.text = displayValue;
   }
