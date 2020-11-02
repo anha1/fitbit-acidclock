@@ -1,5 +1,6 @@
 import { HeartRateSensor } from "heart-rate";
 import { user } from "user-profile";
+import { me as appbit } from "appbit";
 
 export let HrmAnimation = function(document, settings) {
   let self = this;  
@@ -28,7 +29,7 @@ export let HrmAnimation = function(document, settings) {
   }
 
   let tryShowRestingBpm = function() {
-    if (user && settings.isTrue("isShowRestingBpm")) {
+    if (appbit.permissions.granted("access_user_profile") && user && settings.isTrue("isShowRestingBpm")) {
         let restingBpm = user.restingHeartRate;
         if (restingBpm) {
           hrRestingCountEl.text = restingBpm;  

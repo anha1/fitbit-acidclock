@@ -79,7 +79,7 @@ let stepsProgress = new StepsProgress(
 );
 
 let isCryptoMode = function() {
-  return MODE.isForceCryptoMode || settings.isTrue("isShowCc"); 
+  return settings.isTrue("isShowCc") && appbit.permissions.granted("access_internet"); 
 }
 
 let isCryptoOnShortScreen = function() {
@@ -297,6 +297,7 @@ inbox.addEventListener("newfile", function() {
   }
 });
 
+document.getElementById("initFail").style.display = "none";
 
 
 

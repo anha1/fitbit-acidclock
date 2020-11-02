@@ -21,6 +21,25 @@
   fill: white;
 }
 
+#initFail {
+  font-size: 22;
+  font-family: System-Bold;
+  width: 350;
+  text-length: 32;
+
+  fill: white;
+}
+
+#initFail1 {
+     y: 22;
+}
+#initFail2 {
+     y: 44;
+}
+#initFail3 {
+     y: 66;
+}
+
 #amPm {
   font-size: 33;
   font-family: System-Bold;

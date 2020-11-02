@@ -3,6 +3,7 @@ import * as util from "../common/utils";
 import * as weekday from "./weekday";
 import { MODE } from "../common/mode";
 import exercise from "exercise";
+import  * as exerciseState from "../common/exercise-state";
 
 export let TimeIndicator = function(document, settings) {
   let self = this;
@@ -57,7 +58,7 @@ export let TimeIndicator = function(document, settings) {
     var hoursDisplayVal = hours;
     let is12hourClock = preferences.clockDisplay === "12h" || settings.isTrue("is12hourClock");
     
-    let isForceNoAmPm = exercise && exercise.state != "stopped";
+    let isForceNoAmPm = exerciseState.isActiveExercise(settings);
     
     let isAmPm = !(isForceNoAmPm || settings.isFalse("isAmPm"));
     

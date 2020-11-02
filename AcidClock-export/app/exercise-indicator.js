@@ -6,10 +6,14 @@ import * as appUtils from "./app-utils";
 import { MODE } from "../common/mode";
 import { display } from "display";
 import { me as device } from "device";
+import { me as appbit } from "appbit";
+import  * as exerciseState from "../common/exercise-state";
+
 
 export let ExerciseIndicator = function(document, settings, additionalActionsOnStateChange) {
+   
   let self = this;
-  
+      
   let viewRegular = document.getElementById("view-regular");
   let viewExercise = document.getElementById("view-exercise");
   let viewExerciseType = document.getElementById("view-exercise-type");
@@ -57,21 +61,17 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
   
 
   self.draw = function() {
-    if (!exercise || !exercise.stats) {
+    if (!exerciseState.isActiveExerciseMode(settings)) {
       return;
     }    
     
-    if (MODE.isScreenshotMode) {
-      metricTime.text = "0:45:55";
-      metricCals.text = "302";    
-      metricDist.text = "7.66 km"; 
-      metricSpeed.text = "10.04 km/h";      
+    if (!exercise.stats) {
       return;
     }
-    
-    metricTime.text = appUtils.getDurationDisplayValue(exercise.stats.activeTime);
-    metricCals.text = exercise.stats.calories;    
-    metricDist.text = appUtils.getDistanceDisplayValue(settings, exercise.stats.distance);
+        
+    metricTime.text = appUtils.getDurationDisplayValue(exercise.stats.activeTime) || 0;
+    metricCals.text = exercise.stats.calories || 0;
+    metricDist.text = appUtils.getDistanceDisplayValue(settings, exercise.stats.distance) || 0;
     if (exercise.stats.speed) {
       let speedType = settings.getOrElse("speedType", "average");
       metricSpeed.text = appUtils.getSpeedDisplayValue(settings, exercise.stats.speed[speedType]);
@@ -97,7 +97,8 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
   }
   
   self.applyState = function() {   
-    if (!exercise || settings.isFalse("isExercise")) {
+ 
+    if (!exerciseState.isActiveExerciseMode(settings)) {    
       btnFinish .style.display = "none";
       viewExerciseType.style.display = "none";
       viewRegular.style.display = "inline";
@@ -105,12 +106,12 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
       btnPlay.style.display = "none";
       btnPause.style.display = "none";
       self.stopRefresh();
-      if (exercise && exercise.state != "stopped") {
-        exercise.stop();
-      }       
+      exerciseState.dropActiveExecrciseIfFeatureDisabled(settings);
       return;
     }
     
+    let isGps = appbit.permissions.granted("access_location") && exercise.type && locationActivities.indexOf(exercise.type) > -1;
+   
     if (isMenuMode) {
       exerciseType1.text = typeToCaption(getExerciseType(1));
       exerciseType2.text = typeToCaption(getExerciseType(2));
@@ -118,8 +119,6 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
       exerciseType4.text = typeToCaption(getExerciseType(4));    
       exerciseType4.style.display = (device.modelName == "Ionic") ? "none" :"inline";  
     }
-    
-    let isGps = MODE.isScreenshotMode || (exercise.type && locationActivities.indexOf(exercise.type) > -1);
     
     viewExerciseType.style.display = isMenuMode ? "inline" :"none";  
     metricDistContainer.style.display = isGps ? "inline" :"none";  
@@ -173,7 +172,8 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
     isMenuMode = false;
   }
   
-  if (exercise) {
+  
+  if (exerciseState.isActiveExerciseMode(settings)) {
     exercise.onstatechange = function() {
       self.applyState();
     }
@@ -196,7 +196,7 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
   }
 
   btnFinish.onclick = function(evt) {
-    if (!exercise) {
+    if (!exerciseState.isActiveExerciseMode(settings)) {
       return;
     }
     if (exercise.state != "stopped") {
@@ -207,7 +207,7 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
   }
   
   btnPause.onclick = function(evt) {
-    if (!exercise) {
+    if (!exerciseState.isActiveExerciseMode(settings)) {
       return;
     }
     if (exercise.state == "started") {
@@ -218,7 +218,7 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
   }
 
   btnPlay.onclick = function(evt) {
-    if (!exercise) {
+    if (!exerciseState.isActiveExerciseMode(settings)) {
       return;
     }
     if (exercise.state == "stopped") {
@@ -236,7 +236,7 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
   }
   
   let startExercise = function(exerciseType) {
-    if (!exercise) {
+    if (!exerciseState.isActiveExerciseMode(settings)) {
       return;
     }
     if (exercise.state != "stopped") {
@@ -246,7 +246,7 @@ export let ExerciseIndicator = function(document, settings, additionalActionsOnS
     
     vibration.start("confirmation");
     
-    let isGps = !settings.isFalse("isGps") && !MODE.isScreenshotMode && locationActivities.indexOf(exerciseType) > -1;
+    let isGps = !settings.isFalse("isGps") && appbit.permissions.granted("access_location") && locationActivities.indexOf(exerciseType) > -1;
     
     exercise.start(exerciseType, { gps: isGps }); 
     hideMenu();  
