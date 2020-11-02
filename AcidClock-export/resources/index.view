@@ -8,6 +8,13 @@
    </defs>
     
    <rect id="background" />
+  
+   <g  id="initFail">
+      <text id="initFail1">Error: please try to enable</text>
+      <text id="initFail2">all permissions or contact</text>
+      <text id="initFail3">support. Sorry about this :(</text>
+   </g>
+  
    <image id="backgroundImage" width="100%" height="100%" />
    <text id="time" />
    <text id="amPm" />
@@ -109,7 +116,6 @@
    <g id="view-exercise">
       <g id="exercise-metric-time">
          <text class="count" id="exercise-metric-time-count">88:88:88</text>
-        
       </g>
       <g id="exercise-metric-cals">
          <text class="count" id="exercise-metric-cals-count">88888</text>
