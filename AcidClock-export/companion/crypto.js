@@ -48,7 +48,10 @@ let jsonPriceToVal = function(response, ratio) {
 }
 
 let queryCcer = function(leftCc, rightCc, ratio) {
-  let url = "https://api.binance.com/api/v1/ticker/price?symbol=";
+  let isBinanceUs = 'true' === settingsStorage.getItem('isBinanceUs'); 
+  let binanceDomain = isBinanceUs ? 'binance.us' : 'binance.com';  
+  let url = "https://api." + binanceDomain + "/api/v1/ticker/price?symbol=";
+  console.log(url);
   Promise.all([fetch(url + leftCc),  fetch(url + rightCc)])
   .then(function(responses) {
        Promise.all([responses[0].json(), responses[1].json()])
@@ -83,15 +86,15 @@ export let CryptoCompanion = function() {
     if ("USD" == referenceCurrencyCc) {
       queryCcer(leftCc, rightCc, 1);   
     } else {
-      let url = "https://api.exchangeratesapi.io/latest?base=USD";
+      let url = "https://api.exchangerate.host/latest?base=USD&symbols=" + referenceCurrencyCc;
        fetch(url)
        .then(function (response) {
           response.json()
           .then(function(data) {
-            var ratio = data["rates"][referenceCurrencyCc];    
+            var ratio = data["rates"][referenceCurrencyCc];  
             queryCcer(leftCc, rightCc, ratio); 
           })
-       })                
+       });                
     }
   }
   
