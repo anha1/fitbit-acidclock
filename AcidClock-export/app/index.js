@@ -53,11 +53,13 @@ let settings = new Settings(SETTINGS_FILE, function() {
     goal2: "elevationGain",
     goal3: "calories",
     goal4: "activeMinutes",
-    currencyCc: "USD"
+    currencyCc: "USD",
+    isBinanceUs: false
   };
   if (units.distance === "us") {
     defaults.distanceUnit = "mi";
     defaults.dateFormat = "MM.DD"; 
+    defaults.isBinanceUs = true;
   }   
   if (!isElevation) {
     defaults.goal2 = "calories";

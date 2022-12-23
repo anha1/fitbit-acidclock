@@ -104,8 +104,7 @@ function mySettings(props) {
         {value:"sv", name:"Swedish"},        
         {value:"hu", name:"Hungarian"},
         {value:"pl", name:"Polish"},
-        {value:"uk", name:"Ukrainian"},
-        {value:"ru", name:"Russian"},      
+        {value:"uk", name:"Ukrainian"},  
         {value:"zh", name:"Chinese"},
         {value:"ja", name:"Japanese"},          
         {value:"ko", name:"Korean"},   
@@ -264,11 +263,15 @@ function mySettings(props) {
         <Toggle
          settingsKey="isShowCc"
          label="Show Cryptocurrencies"
-        />   
+        />           
         <Toggle
          settingsKey="isVibrationOnCcErRefresh"
          label="Vibration on refresh"
         />
+        <Toggle
+         settingsKey="isBinanceUs"
+         label="Use binance.US (for USA users)"
+        />  
         <Select
         label="Auto refresh interval (when the screen is on)"
         settingsKey="autoRefreshIntervalCc"
@@ -293,8 +296,7 @@ function mySettings(props) {
           label="Right CC Binance ticker (like ETHUSDT)"
           settingsKey="rightCcTicker"
           placeholder="ETHUSDT"
-        />
-        
+        /> 
         <Select
         label="Convert USD CC prices into"
         settingsKey="referenceCurrencyCc"
@@ -315,7 +317,6 @@ function mySettings(props) {
           {value:"IDR", name:"IDR"},
           {value:"INR", name:"INR"},
           {value:"BRL", name:"BRL"},
-          {value:"RUB", name:"RUB"},
           {value:"HRK", name:"HRK"},
           {value:"THB", name:"THB"},
           {value:"CHF", name:"CHF"},
